@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- A rounded TV screen with a rising sun over the horizon. -->
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="108dp"
+    android:height="108dp"
+    android:viewportWidth="108"
+    android:viewportHeight="108">
+    <!-- glass screen -->
+    <path
+        android:fillColor="#33FFFFFF"
+        android:pathData="M34,36h40a6,6 0,0 1,6 6v22a6,6 0,0 1,-6 6h-40a6,6 0,0 1,-6 -6v-22a6,6 0,0 1,6 -6z"
+        android:strokeWidth="2.2"
+        android:strokeColor="#E6FFFFFF" />
+    <!-- sun -->
+    <path
+        android:fillColor="#FFFFC46B"
+        android:pathData="M44,60a10,10 0,0 1,20 0z" />
+    <!-- horizon -->
+    <path
+        android:pathData="M33,60h42"
+        android:strokeWidth="2.2"
+        android:strokeColor="#FFFFFFFF"
+        android:strokeLineCap="round" />
+    <!-- stand -->
+    <path
+        android:pathData="M46,75h16"
+        android:strokeWidth="2.6"
+        android:strokeColor="#CCFFFFFF"
+        android:strokeLineCap="round" />
+</vector>

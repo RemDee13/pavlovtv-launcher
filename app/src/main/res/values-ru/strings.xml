@@ -1,0 +1,232 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="screensaver_name">PavlovTV: слайд-шоу</string>
+
+    <!-- Common actions -->
+    <string name="action_launcher_settings">Настроить PavlovTV</string>
+    <string name="action_system_settings">Настройки Android</string>
+    <string name="action_refresh">Обновить</string>
+    <string name="action_save">Сохранить</string>
+    <string name="action_cancel">Отмена</string>
+    <string name="action_done">Готово</string>
+    <string name="action_search">Найти</string>
+    <string name="action_remove">Удалить</string>
+    <string name="tap_to_remove">Нажмите OK, чтобы удалить</string>
+
+    <!-- Home -->
+    <string name="home_favorites">Избранное</string>
+    <string name="home_favorites_empty">Зажмите OK на любом приложении ниже и выберите «Добавить в избранное».</string>
+    <string name="home_all_apps">Все приложения · %1$d</string>
+    <string name="home_show_widget">Показывать на главном экране</string>
+    <string name="home_sections">Что показывать на главном</string>
+    <string name="home_phone_apps">Показывать приложения для телефона</string>
+    <string name="home_phone_apps_hint">Приложения, у которых нет версии для ТВ</string>
+    <string name="home_make_default">Сделать PavlovTV главным экраном</string>
+    <string name="home_make_default_hint">Откроет выбор «Главный экран» в Android, если он есть на этом ТВ</string>
+    <string name="home_make_default_fallback">На этом ТВ нет выбора главного экрана. Выполните с компьютера: adb shell cmd package set-home-activity io.github.remdee13.pavlovtv/.MainActivity</string>
+
+    <!-- App menu -->
+    <string name="app_add_favorite">Добавить в избранное</string>
+    <string name="app_remove_favorite">Убрать из избранного</string>
+    <string name="app_move">Переместить</string>
+    <string name="app_move_hint">← → двигать · OK готово</string>
+    <string name="app_hide">Скрыть приложение</string>
+    <string name="app_info">О приложении</string>
+    <string name="app_uninstall">Удалить</string>
+    <string name="app_launch_failed">Не удалось открыть приложение</string>
+
+    <!-- Recommendations -->
+    <string name="recs_title">Рекомендации</string>
+    <string name="recs_show">Показывать ряды рекомендаций</string>
+    <string name="recs_hint">Подборки, которые YouTube, Netflix, Plex и другие приложения публикуют для главного экрана</string>
+    <string name="recs_watch_next">Продолжить просмотр</string>
+    <string name="recs_permission_hint">Разрешите доступ, чтобы видеть рекомендации ваших приложений.</string>
+    <string name="recs_permission_button">Разрешить доступ</string>
+    <string name="recs_status_ok">Рекомендации включены.</string>
+    <string name="recs_status_empty">Доступ есть, но приложения ещё ничего не опубликовали. Откройте YouTube или другое приложение хотя бы раз.</string>
+    <string name="recs_status_permission">Для рекомендаций PavlovTV нужно разрешение «Телепрограмма».</string>
+    <string name="recs_status_unsupported">Этот ТВ не отдаёт рекомендации сторонним оболочкам.</string>
+    <string name="recs_adb_hint">Если ничего не происходит, выполните один раз с компьютера: adb shell pm grant io.github.remdee13.pavlovtv android.permission.READ_TV_LISTINGS</string>
+
+    <!-- Weather -->
+    <string name="weather_title">Погода</string>
+    <string name="weather_loading">Загрузка…</string>
+    <string name="weather_unavailable">Нет данных о погоде. Проверьте интернет.</string>
+    <string name="weather_feels_like">ощущается %1$s</string>
+    <string name="weather_humidity">Влажность %1$d%%</string>
+    <string name="weather_wind">Ветер %1$s</string>
+    <string name="unit_kmh">км/ч</string>
+    <string name="unit_mph">миль/ч</string>
+    <string name="weather_cities">Города</string>
+    <string name="weather_city">Город</string>
+    <string name="weather_auto">Определять автоматически</string>
+    <string name="weather_auto_hint">По примерному местоположению вашего интернет-подключения</string>
+    <string name="weather_pick_city">Выберите город</string>
+    <string name="weather_add_city">Добавить город</string>
+    <string name="weather_extra_cities">Ещё города (до 3)</string>
+    <string name="weather_units">Единицы</string>
+    <string name="weather_attribution">Данные о погоде: Open-Meteo.com</string>
+    <string name="weather_clear">Ясно</string>
+    <string name="weather_mostly_clear">Почти ясно</string>
+    <string name="weather_partly_cloudy">Переменная облачность</string>
+    <string name="weather_overcast">Облачно</string>
+    <string name="weather_fog">Туман</string>
+    <string name="weather_drizzle">Морось</string>
+    <string name="weather_rain">Дождь</string>
+    <string name="weather_heavy_rain">Сильный дождь</string>
+    <string name="weather_showers">Ливень</string>
+    <string name="weather_snow">Снег</string>
+    <string name="weather_sleet">Мокрый снег</string>
+    <string name="weather_thunder">Гроза</string>
+    <string name="weather_thunder_hail">Гроза с градом</string>
+    <string name="city_search_placeholder">Название города</string>
+    <string name="city_searching">Ищем…</string>
+    <string name="city_not_found">Ничего не нашлось. Попробуйте написать иначе.</string>
+
+    <!-- Clocks -->
+    <string name="clocks_24h">24-часовой формат</string>
+    <string name="clocks_list">Часы · %1$d из %2$d</string>
+    <string name="clocks_add">Добавить часы</string>
+    <string name="clocks_analog">Стрелочные</string>
+    <string name="clocks_digital">Цифровые</string>
+    <string name="clocks_reset">Вернуть как было</string>
+    <string name="clock_same_time">то же время</string>
+    <string name="clock_offset_hours">%1$s ч</string>
+    <string name="clock_tomorrow">завтра</string>
+    <string name="clock_yesterday">вчера</string>
+
+    <!-- News -->
+    <string name="news_title">Новости</string>
+    <string name="news_loading">Загружаем заголовки…</string>
+    <string name="news_empty">Пока нет новостей. Добавьте любой сайт или RSS: Настройки → Новости.</string>
+    <string name="news_just_now">только что</string>
+    <string name="news_minutes_ago">%1$d мин назад</string>
+    <string name="news_hours_ago">%1$d ч назад</string>
+    <string name="news_sources">Источники</string>
+    <string name="news_qr_hint">Наведите камеру, чтобы читать на телефоне</string>
+    <string name="news_open_hint">или нажмите OK, чтобы открыть в браузере ТВ</string>
+    <string name="news_no_browser">На этом ТВ нет браузера</string>
+    <string name="news_custom">Ваши источники</string>
+    <string name="news_add_feed">Добавить сайт или RSS</string>
+    <string name="news_add_feed_hint">Сайт вроде habr.com, канал YouTube или ссылка на RSS: PavlovTV сам найдёт ленту</string>
+    <string name="news_add_from_phone">Добавить с телефона</string>
+    <string name="news_add_from_phone_hint">Отсканируйте QR-код и вставьте любую ссылку. Проще, чем набирать пультом</string>
+    <string name="news_add">Добавить</string>
+    <string name="news_feed_placeholder">habr.com или https://…/rss</string>
+    <string name="news_feed_checking">Ищем новости на этом сайте…</string>
+    <string name="news_feed_added">Добавлено: %1$s</string>
+    <string name="news_feed_not_found">По этому адресу лента новостей не нашлась. Попробуйте главную страницу сайта или ссылку на RSS</string>
+    <string name="news_catalog">Готовые источники</string>
+    <string name="news_phone_page_title">Новости для PavlovTV</string>
+    <string name="news_phone_page_hint">Вставьте адрес сайта, канала YouTube или ссылку на RSS. Добавляйте сколько угодно.</string>
+    <string name="news_phone_step3">3. Вставьте любую ссылку: источник сразу появится на ТВ</string>
+
+    <!-- Settings -->
+    <string name="settings_title">Настройки</string>
+    <string name="settings_appearance">Оформление</string>
+    <string name="settings_wallpaper">Обои</string>
+    <string name="settings_screensaver">Заставка</string>
+    <string name="settings_weather">Погода</string>
+    <string name="settings_clocks">Мировое время</string>
+    <string name="settings_news">Новости</string>
+    <string name="settings_home">Главный экран</string>
+    <string name="settings_apps">Приложения</string>
+    <string name="settings_language">Язык</string>
+    <string name="settings_about">О программе</string>
+    <string name="appearance_style">Стиль интерфейса</string>
+    <string name="style_glass">Liquid Glass</string>
+    <string name="style_glass_hint">Полупрозрачные матовые панели с бликами по краям</string>
+    <string name="style_solid">Сплошной</string>
+    <string name="style_solid_hint">Спокойные непрозрачные панели без стекла. И чуть легче для медленных ТВ</string>
+    <string name="language_system">Как на телевизоре</string>
+
+    <!-- Wallpaper -->
+    <string name="wallpaper_source">Источник</string>
+    <string name="wallpaper_dim">Затемнение обоев</string>
+    <string name="wallpaper_next">Показать другую картинку</string>
+    <string name="wallpaper_url">Картинка по ссылке</string>
+    <string name="wallpaper_from_phone">Отправить фото с телефона</string>
+    <string name="wallpaper_from_phone_hint">Сканируете QR-код, выбираете фото, готово. Телефон и ТВ должны быть в одной Wi-Fi сети</string>
+    <string name="wallpaper_from_storage">Из памяти ТВ или с флешки</string>
+    <string name="wallpaper_photos_hint">Ваши фото. OK ставит обои, долгое нажатие удаляет</string>
+    <string name="wallpaper_photo_deleted">Фото удалено</string>
+    <string name="wallpaper_applied">Обои установлены</string>
+    <string name="source_gradient">Градиенты</string>
+    <string name="source_gradient_hint">Встроенные, работают без интернета</string>
+    <string name="source_bing">Bing · фото дня</string>
+    <string name="source_bing_hint">Каждый день новое фото</string>
+    <string name="source_picsum">Фото с Unsplash</string>
+    <string name="source_picsum_hint">Случайные фотографии через Lorem Picsum</string>
+    <string name="source_wikimedia">Wikimedia · фото дня</string>
+    <string name="source_wikimedia_hint">Избранные фото с Wikimedia Commons</string>
+    <string name="source_art">Искусство · картины в общественном достоянии</string>
+    <string name="source_art_hint">Коллекция Art Institute of Chicago</string>
+    <string name="source_nasa">NASA · фото космоса</string>
+    <string name="source_nasa_hint">Снимки из открытой медиатеки NASA</string>
+    <string name="source_photos">Мои фото</string>
+    <string name="source_photos_hint">Картинки, которые вы прислали с телефона или флешки</string>
+    <string name="source_url">Ссылка</string>
+    <string name="source_url_hint">Любая картинка из интернета</string>
+    <string name="gradient_aurora">Сияние</string>
+    <string name="gradient_sunset">Закат</string>
+    <string name="gradient_ocean">Океан</string>
+    <string name="gradient_forest">Лес</string>
+    <string name="gradient_graphite">Графит</string>
+    <string name="gradient_midnight">Полночь</string>
+    <string name="gradient_sakura">Сакура</string>
+    <string name="gradient_desert">Пустыня</string>
+
+    <!-- Upload from phone -->
+    <string name="upload_title">Отправьте фото с телефона</string>
+    <string name="upload_step1">1. Подключите телефон к той же Wi-Fi сети, что и ТВ</string>
+    <string name="upload_step2">2. Наведите камеру на QR-код</string>
+    <string name="upload_step3">3. Выберите фото: они сразу появятся здесь</string>
+    <string name="upload_received">Получено: %1$d</string>
+    <string name="upload_no_network">Телевизор не подключён к сети</string>
+    <string name="upload_page_title">Отправить на PavlovTV</string>
+    <string name="upload_page_hint">Выберите одно или несколько фото. Телефон уменьшит их и отправит на ТВ.</string>
+    <string name="upload_page_choose">Выбрать фото</string>
+    <string name="upload_page_sending">Отправляем</string>
+    <string name="upload_page_done">Готово! Фото уже на телевизоре.</string>
+    <string name="upload_page_failed">Не получилось отправить это фото.</string>
+    <string name="storage_title">Картинки на телевизоре</string>
+    <string name="storage_permission">Разрешите доступ к фото, чтобы видеть картинки в памяти ТВ и на флешках.</string>
+    <string name="storage_empty">Картинок не нашлось. Вставьте флешку с фотографиями.</string>
+    <string name="storage_importing">Готовим картинку…</string>
+    <string name="storage_failed">Не удалось прочитать эту картинку</string>
+
+    <!-- Screensaver -->
+    <string name="saver_how_to">PavlovTV добавляет заставку-слайдшоу. Включите её в настройках Android → Настройки устройства → Заставка → PavlovTV: слайд-шоу.</string>
+    <string name="saver_open_system">Открыть настройки заставки Android</string>
+    <string name="saver_preview">Посмотреть</string>
+    <string name="saver_same_as_wallpaper">Как обои</string>
+    <string name="saver_options">Параметры</string>
+    <string name="saver_interval">Менять картинку каждые</string>
+    <string name="saver_seconds">%1$d с</string>
+    <string name="saver_show_clock">Показывать часы</string>
+    <string name="saver_show_weather">Показывать погоду</string>
+    <string name="saver_motion">Плавное движение</string>
+    <string name="saver_motion_hint">Медленное приближение и сдвиг. Выключите, если ТВ подтормаживает</string>
+
+    <!-- Apps -->
+    <string name="apps_long_press_hint">Совет: зажмите OK на любой плитке, чтобы добавить её в избранное, передвинуть или скрыть.</string>
+    <string name="apps_reset_favorites">Сбросить избранное</string>
+    <string name="apps_hidden">Скрытые приложения</string>
+    <string name="apps_hidden_empty">Скрытых приложений нет.</string>
+    <string name="apps_tap_to_show">Нажмите OK, чтобы вернуть</string>
+
+    <!-- About -->
+    <string name="about_tagline">Открытая оболочка для Android TV</string>
+    <string name="about_license">Свободная программа, лицензия GNU GPL v3.0</string>
+    <string name="about_sources">Источники данных</string>
+    <string name="about_sources_text">Погода: Open-Meteo.com (CC BY 4.0). Поиск городов: Open-Meteo Geocoding / GeoNames. Местоположение по IP: GeoJS. Обои: Bing, Lorem Picsum (Unsplash), Wikimedia Commons, Art Institute of Chicago (CC0), NASA Image Library. Новости: RSS-ленты указанных изданий. QR-коды: ZXing.</string>
+    <string name="news_topics">Темы</string>
+    <string name="topic_ai">Искусственный интеллект</string>
+    <string name="topic_tech">Технологии</string>
+    <string name="topic_business">Бизнес</string>
+    <string name="topic_science">Наука</string>
+    <string name="topic_world">Мир</string>
+    <string name="recs_only_watch_next">Только «Продолжить просмотр»</string>
+    <string name="recs_only_watch_next_hint">Скрыть ряды YouTube, Twitch и других приложений. Легче для слабых ТВ</string>
+    <string name="recs_rows">Ряды на главном экране</string>
+</resources>

@@ -1,0 +1,232 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="screensaver_name">PavlovTV-Diashow</string>
+
+    <!-- Common actions -->
+    <string name="action_launcher_settings">PavlovTV anpassen</string>
+    <string name="action_system_settings">Android-Einstellungen</string>
+    <string name="action_refresh">Aktualisieren</string>
+    <string name="action_save">Speichern</string>
+    <string name="action_cancel">Abbrechen</string>
+    <string name="action_done">Fertig</string>
+    <string name="action_search">Suchen</string>
+    <string name="action_remove">Entfernen</string>
+    <string name="tap_to_remove">Zum Entfernen OK drücken</string>
+
+    <!-- Home -->
+    <string name="home_favorites">Favoriten</string>
+    <string name="home_favorites_empty">Halte OK bei einer App unten gedrückt und wähle „Zu Favoriten hinzufügen“.</string>
+    <string name="home_all_apps">Alle Apps · %1$d</string>
+    <string name="home_show_widget">Auf dem Startbildschirm zeigen</string>
+    <string name="home_sections">Bereiche des Startbildschirms</string>
+    <string name="home_phone_apps">Smartphone-Apps anzeigen</string>
+    <string name="home_phone_apps_hint">Apps für Smartphones, die keine TV-Version haben</string>
+    <string name="home_make_default">PavlovTV als Startbildschirm festlegen</string>
+    <string name="home_make_default_hint">Öffnet die Android-Auswahl „Start-App“, falls dieser Fernseher eine hat</string>
+    <string name="home_make_default_fallback">Dieser Fernseher hat keine Auswahl für die Start-App. Führe am Computer aus: adb shell cmd package set-home-activity io.github.remdee13.pavlovtv/.MainActivity</string>
+
+    <!-- App menu -->
+    <string name="app_add_favorite">Zu Favoriten hinzufügen</string>
+    <string name="app_remove_favorite">Aus Favoriten entfernen</string>
+    <string name="app_move">Verschieben</string>
+    <string name="app_move_hint">← → verschieben · OK fertig</string>
+    <string name="app_hide">App ausblenden</string>
+    <string name="app_info">App-Info</string>
+    <string name="app_uninstall">Deinstallieren</string>
+    <string name="app_launch_failed">Diese App konnte nicht geöffnet werden</string>
+
+    <!-- Recommendations -->
+    <string name="recs_title">Empfehlungen</string>
+    <string name="recs_show">Empfehlungszeilen anzeigen</string>
+    <string name="recs_hint">Zeilen, die Apps wie YouTube, Netflix oder Plex für den Startbildschirm bereitstellen</string>
+    <string name="recs_watch_next">Weiterschauen</string>
+    <string name="recs_permission_hint">Erlaube den Zugriff, um Empfehlungen deiner Apps zu sehen.</string>
+    <string name="recs_permission_button">Zugriff erlauben</string>
+    <string name="recs_status_ok">Empfehlungen sind aktiv.</string>
+    <string name="recs_status_empty">Zugriff erteilt, aber noch keine App hat Empfehlungen bereitgestellt. Öffne einmal YouTube oder eine andere App.</string>
+    <string name="recs_status_permission">PavlovTV braucht die Berechtigung „TV-Programm“, um Empfehlungen zu lesen.</string>
+    <string name="recs_status_unsupported">Dieser Fernseher stellt anderen Launchern keine Empfehlungszeilen bereit.</string>
+    <string name="recs_adb_hint">Falls nichts passiert, führe einmal am Computer aus: adb shell pm grant io.github.remdee13.pavlovtv android.permission.READ_TV_LISTINGS</string>
+
+    <!-- Weather -->
+    <string name="weather_title">Wetter</string>
+    <string name="weather_loading">Wird geladen…</string>
+    <string name="weather_unavailable">Keine Wetterdaten. Prüfe die Internetverbindung.</string>
+    <string name="weather_feels_like">gefühlt %1$s</string>
+    <string name="weather_humidity">Luftfeuchte %1$d%%</string>
+    <string name="weather_wind">Wind %1$s</string>
+    <string name="unit_kmh">km/h</string>
+    <string name="unit_mph">mph</string>
+    <string name="weather_cities">Städte</string>
+    <string name="weather_city">Stadt</string>
+    <string name="weather_auto">Automatisch erkennen</string>
+    <string name="weather_auto_hint">Nutzt den ungefähren Standort deiner Internetverbindung</string>
+    <string name="weather_pick_city">Stadt auswählen</string>
+    <string name="weather_add_city">Stadt hinzufügen</string>
+    <string name="weather_extra_cities">Weitere Städte (bis zu 3)</string>
+    <string name="weather_units">Einheiten</string>
+    <string name="weather_attribution">Wetterdaten von Open-Meteo.com</string>
+    <string name="weather_clear">Klar</string>
+    <string name="weather_mostly_clear">Überwiegend klar</string>
+    <string name="weather_partly_cloudy">Teilweise bewölkt</string>
+    <string name="weather_overcast">Bewölkt</string>
+    <string name="weather_fog">Nebel</string>
+    <string name="weather_drizzle">Nieselregen</string>
+    <string name="weather_rain">Regen</string>
+    <string name="weather_heavy_rain">Starkregen</string>
+    <string name="weather_showers">Schauer</string>
+    <string name="weather_snow">Schnee</string>
+    <string name="weather_sleet">Schneeregen</string>
+    <string name="weather_thunder">Gewitter</string>
+    <string name="weather_thunder_hail">Gewitter mit Hagel</string>
+    <string name="city_search_placeholder">Name der Stadt</string>
+    <string name="city_searching">Suche läuft…</string>
+    <string name="city_not_found">Nichts gefunden. Versuch eine andere Schreibweise.</string>
+
+    <!-- Clocks -->
+    <string name="clocks_24h">24-Stunden-Format</string>
+    <string name="clocks_list">Uhren · %1$d von %2$d</string>
+    <string name="clocks_add">Uhr hinzufügen</string>
+    <string name="clocks_analog">Analog</string>
+    <string name="clocks_digital">Digital</string>
+    <string name="clocks_reset">Auf Standard zurücksetzen</string>
+    <string name="clock_same_time">gleiche Zeit</string>
+    <string name="clock_offset_hours">%1$s Std.</string>
+    <string name="clock_tomorrow">morgen</string>
+    <string name="clock_yesterday">gestern</string>
+
+    <!-- News -->
+    <string name="news_title">Nachrichten</string>
+    <string name="news_loading">Schlagzeilen werden geladen…</string>
+    <string name="news_empty">Noch keine Nachrichten. Füge in Einstellungen → Nachrichten eine beliebige Website oder RSS hinzu.</string>
+    <string name="news_just_now">gerade eben</string>
+    <string name="news_minutes_ago">vor %1$d Min.</string>
+    <string name="news_hours_ago">vor %1$d Std.</string>
+    <string name="news_sources">Quellen</string>
+    <string name="news_qr_hint">Scannen und auf dem Handy lesen</string>
+    <string name="news_open_hint">oder OK drücken, um im TV-Browser zu öffnen</string>
+    <string name="news_no_browser">Auf diesem Fernseher ist kein Browser installiert</string>
+    <string name="news_custom">Deine Quellen</string>
+    <string name="news_add_feed">Website oder RSS hinzufügen</string>
+    <string name="news_add_feed_hint">Eine Seite wie tagesschau.de, ein YouTube-Kanal oder ein RSS-Link: PavlovTV findet den Feed selbst</string>
+    <string name="news_add_from_phone">Vom Handy hinzufügen</string>
+    <string name="news_add_from_phone_hint">QR-Code scannen und einen beliebigen Link einfügen. Einfacher als mit der Fernbedienung zu tippen</string>
+    <string name="news_add">Hinzufügen</string>
+    <string name="news_feed_placeholder">tagesschau.de oder https://…/rss</string>
+    <string name="news_feed_checking">Suche Nachrichten auf dieser Seite…</string>
+    <string name="news_feed_added">Hinzugefügt: %1$s</string>
+    <string name="news_feed_not_found">Unter dieser Adresse gibt es keinen Nachrichten-Feed. Versuche die Startseite oder den RSS-Link</string>
+    <string name="news_catalog">Vorschläge</string>
+    <string name="news_phone_page_title">Nachrichten für PavlovTV</string>
+    <string name="news_phone_page_hint">Füge die Adresse einer Website, eines YouTube-Kanals oder einen RSS-Link ein. So viele du willst.</string>
+    <string name="news_phone_step3">3. Beliebigen Link einfügen: Die Quelle erscheint sofort auf dem TV</string>
+
+    <!-- Settings -->
+    <string name="settings_title">Einstellungen</string>
+    <string name="settings_appearance">Darstellung</string>
+    <string name="settings_wallpaper">Hintergrund</string>
+    <string name="settings_screensaver">Bildschirmschoner</string>
+    <string name="settings_weather">Wetter</string>
+    <string name="settings_clocks">Weltuhr</string>
+    <string name="settings_news">Nachrichten</string>
+    <string name="settings_home">Startbildschirm</string>
+    <string name="settings_apps">Apps</string>
+    <string name="settings_language">Sprache</string>
+    <string name="settings_about">Über</string>
+    <string name="appearance_style">Oberflächenstil</string>
+    <string name="style_glass">Liquid Glass</string>
+    <string name="style_glass_hint">Durchscheinende Milchglas-Flächen mit Licht an den Kanten</string>
+    <string name="style_solid">Deckend</string>
+    <string name="style_solid_hint">Ruhige, undurchsichtige Flächen ohne Glas. Auch etwas leichter für langsame Fernseher</string>
+    <string name="language_system">Wie am Fernseher</string>
+
+    <!-- Wallpaper -->
+    <string name="wallpaper_source">Quelle</string>
+    <string name="wallpaper_dim">Hintergrund abdunkeln</string>
+    <string name="wallpaper_next">Anderes Bild zeigen</string>
+    <string name="wallpaper_url">Bild von einem Link</string>
+    <string name="wallpaper_from_phone">Foto vom Handy senden</string>
+    <string name="wallpaper_from_phone_hint">QR-Code scannen, Fotos auswählen, fertig. Handy und Fernseher müssen im selben WLAN sein</string>
+    <string name="wallpaper_from_storage">Vom TV-Speicher oder USB-Stick</string>
+    <string name="wallpaper_photos_hint">Deine Fotos. OK setzt den Hintergrund, langes Drücken löscht</string>
+    <string name="wallpaper_photo_deleted">Foto gelöscht</string>
+    <string name="wallpaper_applied">Hintergrund festgelegt</string>
+    <string name="source_gradient">Farbverläufe</string>
+    <string name="source_gradient_hint">Integriert, funktionieren offline</string>
+    <string name="source_bing">Bing · Bild des Tages</string>
+    <string name="source_bing_hint">Jeden Tag ein neues Foto</string>
+    <string name="source_picsum">Fotos von Unsplash</string>
+    <string name="source_picsum_hint">Zufällige Fotos über Lorem Picsum</string>
+    <string name="source_wikimedia">Wikimedia · Bild des Tages</string>
+    <string name="source_wikimedia_hint">Exzellente Bilder aus Wikimedia Commons</string>
+    <string name="source_art">Kunst · gemeinfreie Gemälde</string>
+    <string name="source_art_hint">Sammlung des Art Institute of Chicago</string>
+    <string name="source_nasa">NASA · Weltraumfotos</string>
+    <string name="source_nasa_hint">Fotos aus der NASA-Bild- und Videobibliothek</string>
+    <string name="source_photos">Meine Fotos</string>
+    <string name="source_photos_hint">Bilder, die du vom Handy oder USB-Stick gesendet hast</string>
+    <string name="source_url">Link</string>
+    <string name="source_url_hint">Ein beliebiges Bild aus dem Internet</string>
+    <string name="gradient_aurora">Polarlicht</string>
+    <string name="gradient_sunset">Sonnenuntergang</string>
+    <string name="gradient_ocean">Ozean</string>
+    <string name="gradient_forest">Wald</string>
+    <string name="gradient_graphite">Graphit</string>
+    <string name="gradient_midnight">Mitternacht</string>
+    <string name="gradient_sakura">Sakura</string>
+    <string name="gradient_desert">Wüste</string>
+
+    <!-- Upload from phone -->
+    <string name="upload_title">Fotos vom Handy senden</string>
+    <string name="upload_step1">1. Verbinde das Handy mit demselben WLAN wie den Fernseher</string>
+    <string name="upload_step2">2. Scanne den QR-Code mit der Kamera</string>
+    <string name="upload_step3">3. Wähle Fotos aus – sie erscheinen sofort hier</string>
+    <string name="upload_received">Empfangen: %1$d</string>
+    <string name="upload_no_network">Der Fernseher ist mit keinem Netzwerk verbunden</string>
+    <string name="upload_page_title">An PavlovTV senden</string>
+    <string name="upload_page_hint">Wähle ein oder mehrere Fotos. Sie werden auf deinem Handy verkleinert und an den Fernseher gesendet.</string>
+    <string name="upload_page_choose">Fotos auswählen</string>
+    <string name="upload_page_sending">Wird gesendet</string>
+    <string name="upload_page_done">Fertig! Das Foto ist auf dem Fernseher.</string>
+    <string name="upload_page_failed">Dieses Foto konnte nicht gesendet werden.</string>
+    <string name="storage_title">Bilder auf diesem Fernseher</string>
+    <string name="storage_permission">Erlaube den Zugriff auf Fotos, um Bilder auf dem Fernseher und auf USB-Sticks zu sehen.</string>
+    <string name="storage_empty">Keine Bilder gefunden. Schließe einen USB-Stick mit Fotos an.</string>
+    <string name="storage_importing">Bild wird vorbereitet…</string>
+    <string name="storage_failed">Dieses Bild konnte nicht gelesen werden</string>
+
+    <!-- Screensaver -->
+    <string name="saver_how_to">PavlovTV bringt einen Diashow-Bildschirmschoner mit. Aktiviere ihn unter Android-Einstellungen → Geräteeinstellungen → Bildschirmschoner → PavlovTV-Diashow.</string>
+    <string name="saver_open_system">Bildschirmschoner in Android einstellen</string>
+    <string name="saver_preview">Vorschau</string>
+    <string name="saver_same_as_wallpaper">Wie der Hintergrund</string>
+    <string name="saver_options">Optionen</string>
+    <string name="saver_interval">Bild wechseln alle</string>
+    <string name="saver_seconds">%1$d Sek.</string>
+    <string name="saver_show_clock">Uhr anzeigen</string>
+    <string name="saver_show_weather">Wetter anzeigen</string>
+    <string name="saver_motion">Langsame Bewegung</string>
+    <string name="saver_motion_hint">Sanftes Zoomen und Schwenken. Ausschalten, wenn der Fernseher ruckelt</string>
+
+    <!-- Apps -->
+    <string name="apps_long_press_hint">Tipp: Halte OK auf einer Kachel gedrückt, um sie zu den Favoriten hinzuzufügen, zu verschieben oder auszublenden.</string>
+    <string name="apps_reset_favorites">Favoriten zurücksetzen</string>
+    <string name="apps_hidden">Ausgeblendete Apps</string>
+    <string name="apps_hidden_empty">Keine ausgeblendeten Apps.</string>
+    <string name="apps_tap_to_show">OK drücken, um sie wieder anzuzeigen</string>
+
+    <!-- About -->
+    <string name="about_tagline">Open-Source-Startbildschirm für Android TV</string>
+    <string name="about_license">Freie Software unter der GNU GPL v3.0</string>
+    <string name="about_sources">Datenquellen</string>
+    <string name="about_sources_text">Wetter: Open-Meteo.com (CC BY 4.0). Städtesuche: Open-Meteo Geocoding / GeoNames. Standort per IP: GeoJS. Hintergründe: Bing, Lorem Picsum (Unsplash), Wikimedia Commons, Art Institute of Chicago (CC0), NASA Image Library. Nachrichten: RSS-Feeds der aufgeführten Herausgeber. QR-Codes: ZXing.</string>
+    <string name="news_topics">Themen</string>
+    <string name="topic_ai">Künstliche Intelligenz</string>
+    <string name="topic_tech">Technik</string>
+    <string name="topic_business">Wirtschaft</string>
+    <string name="topic_science">Wissenschaft</string>
+    <string name="topic_world">Welt</string>
+    <string name="recs_only_watch_next">Nur „Weiterschauen“</string>
+    <string name="recs_only_watch_next_hint">Blendet die Reihen von YouTube, Twitch und anderen Apps aus. Leichter für langsame TVs</string>
+    <string name="recs_rows">Reihen auf dem Startbildschirm</string>
+</resources>

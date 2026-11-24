@@ -1,0 +1,22 @@
+# Gradle and Kotlin
+.gradle/
+.kotlin/
+build/
+
+# Local machine settings
+local.properties
+
+# Release signing: never commit keys
+keystore.properties
+*.jks
+*.keystore
+
+# IDE
+.idea/
+*.iml
+captures/
+.externalNativeBuild/
+.cxx/
+
+# OS
+.DS_Store

@@ -1,0 +1,233 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name" translatable="false">PavlovTV</string>
+    <string name="screensaver_name">PavlovTV slideshow</string>
+
+    <!-- Common actions -->
+    <string name="action_launcher_settings">Customize PavlovTV</string>
+    <string name="action_system_settings">Android settings</string>
+    <string name="action_refresh">Refresh</string>
+    <string name="action_save">Save</string>
+    <string name="action_cancel">Cancel</string>
+    <string name="action_done">Done</string>
+    <string name="action_search">Search</string>
+    <string name="action_remove">Remove</string>
+    <string name="tap_to_remove">Press OK to remove</string>
+
+    <!-- Home -->
+    <string name="home_favorites">Favorites</string>
+    <string name="home_favorites_empty">Long-press OK on any app below and choose “Add to favorites”.</string>
+    <string name="home_all_apps">All apps · %1$d</string>
+    <string name="home_show_widget">Show on home screen</string>
+    <string name="home_sections">Home screen sections</string>
+    <string name="home_phone_apps">Show phone apps</string>
+    <string name="home_phone_apps_hint">Apps made for phones that have no TV version</string>
+    <string name="home_make_default">Make PavlovTV the home screen</string>
+    <string name="home_make_default_hint">Opens the Android “Home app” picker, if this TV has one</string>
+    <string name="home_make_default_fallback">This TV has no Home app picker. From a computer run: adb shell cmd package set-home-activity io.github.remdee13.pavlovtv/.MainActivity</string>
+
+    <!-- App menu -->
+    <string name="app_add_favorite">Add to favorites</string>
+    <string name="app_remove_favorite">Remove from favorites</string>
+    <string name="app_move">Move</string>
+    <string name="app_move_hint">← → move · OK done</string>
+    <string name="app_hide">Hide app</string>
+    <string name="app_info">App info</string>
+    <string name="app_uninstall">Uninstall</string>
+    <string name="app_launch_failed">Could not open this app</string>
+
+    <!-- Recommendations -->
+    <string name="recs_title">Recommendations</string>
+    <string name="recs_show">Show recommendation rows</string>
+    <string name="recs_hint">Rows that apps like YouTube, Netflix or Plex publish for the home screen</string>
+    <string name="recs_watch_next">Continue watching</string>
+    <string name="recs_permission_hint">Allow access to see recommendations from your apps.</string>
+    <string name="recs_permission_button">Allow access</string>
+    <string name="recs_status_ok">Recommendations are on.</string>
+    <string name="recs_status_empty">Access granted, but no app has published recommendations yet. Open YouTube or another app once.</string>
+    <string name="recs_status_permission">PavlovTV needs the “TV listings” permission to read recommendations.</string>
+    <string name="recs_status_unsupported">This TV does not offer recommendation rows to other launchers.</string>
+    <string name="recs_adb_hint">If nothing happens, run once from a computer: adb shell pm grant io.github.remdee13.pavlovtv android.permission.READ_TV_LISTINGS</string>
+
+    <!-- Weather -->
+    <string name="weather_title">Weather</string>
+    <string name="weather_loading">Loading…</string>
+    <string name="weather_unavailable">No weather data. Check the internet connection.</string>
+    <string name="weather_feels_like">feels like %1$s</string>
+    <string name="weather_humidity">Humidity %1$d%%</string>
+    <string name="weather_wind">Wind %1$s</string>
+    <string name="unit_kmh">km/h</string>
+    <string name="unit_mph">mph</string>
+    <string name="weather_cities">Cities</string>
+    <string name="weather_city">City</string>
+    <string name="weather_auto">Detect automatically</string>
+    <string name="weather_auto_hint">Uses the approximate location of your internet connection</string>
+    <string name="weather_pick_city">Choose a city</string>
+    <string name="weather_add_city">Add a city</string>
+    <string name="weather_extra_cities">More cities (up to 3)</string>
+    <string name="weather_units">Units</string>
+    <string name="weather_attribution">Weather data by Open-Meteo.com</string>
+    <string name="weather_clear">Clear</string>
+    <string name="weather_mostly_clear">Mostly clear</string>
+    <string name="weather_partly_cloudy">Partly cloudy</string>
+    <string name="weather_overcast">Cloudy</string>
+    <string name="weather_fog">Fog</string>
+    <string name="weather_drizzle">Drizzle</string>
+    <string name="weather_rain">Rain</string>
+    <string name="weather_heavy_rain">Heavy rain</string>
+    <string name="weather_showers">Showers</string>
+    <string name="weather_snow">Snow</string>
+    <string name="weather_sleet">Sleet</string>
+    <string name="weather_thunder">Thunderstorm</string>
+    <string name="weather_thunder_hail">Thunderstorm, hail</string>
+    <string name="city_search_placeholder">City name</string>
+    <string name="city_searching">Searching…</string>
+    <string name="city_not_found">Nothing found. Try another spelling.</string>
+
+    <!-- Clocks -->
+    <string name="clocks_24h">24-hour time</string>
+    <string name="clocks_list">Clocks · %1$d of %2$d</string>
+    <string name="clocks_add">Add a clock</string>
+    <string name="clocks_analog">Analog</string>
+    <string name="clocks_digital">Digital</string>
+    <string name="clocks_reset">Reset to defaults</string>
+    <string name="clock_same_time">same time</string>
+    <string name="clock_offset_hours">%1$s h</string>
+    <string name="clock_tomorrow">tomorrow</string>
+    <string name="clock_yesterday">yesterday</string>
+
+    <!-- News -->
+    <string name="news_title">News</string>
+    <string name="news_loading">Loading headlines…</string>
+    <string name="news_empty">No news yet. Add any website or RSS feed in Settings → News.</string>
+    <string name="news_just_now">just now</string>
+    <string name="news_minutes_ago">%1$d min ago</string>
+    <string name="news_hours_ago">%1$d h ago</string>
+    <string name="news_sources">Sources</string>
+    <string name="news_qr_hint">Scan to read on your phone</string>
+    <string name="news_open_hint">or press OK to open in the TV browser</string>
+    <string name="news_no_browser">No browser installed on this TV</string>
+    <string name="news_custom">Your sources</string>
+    <string name="news_add_feed">Add a website or RSS feed</string>
+    <string name="news_add_feed_hint">A site like bbc.com, a YouTube channel or an RSS link: PavlovTV finds the feed itself</string>
+    <string name="news_add_from_phone">Add from your phone</string>
+    <string name="news_add_from_phone_hint">Scan a QR code and paste any link. Easier than typing with the remote</string>
+    <string name="news_add">Add</string>
+    <string name="news_feed_placeholder">bbc.com or https://…/rss</string>
+    <string name="news_feed_checking">Looking for news on this site…</string>
+    <string name="news_feed_added">Added: %1$s</string>
+    <string name="news_feed_not_found">No news feed found at this address. Try the site\'s main page or its RSS link</string>
+    <string name="news_catalog">Suggested sources</string>
+    <string name="news_phone_page_title">News for PavlovTV</string>
+    <string name="news_phone_page_hint">Paste a website address, a YouTube channel or an RSS link. Add as many as you like.</string>
+    <string name="news_phone_step3">3. Paste any link: the source shows up on the TV right away</string>
+
+    <!-- Settings -->
+    <string name="settings_title">Settings</string>
+    <string name="settings_appearance">Appearance</string>
+    <string name="settings_wallpaper">Wallpaper</string>
+    <string name="settings_screensaver">Screensaver</string>
+    <string name="settings_weather">Weather</string>
+    <string name="settings_clocks">World clock</string>
+    <string name="settings_news">News</string>
+    <string name="settings_home">Home screen</string>
+    <string name="settings_apps">Apps</string>
+    <string name="settings_language">Language</string>
+    <string name="settings_about">About</string>
+    <string name="appearance_style">Interface style</string>
+    <string name="style_glass">Liquid Glass</string>
+    <string name="style_glass_hint">See-through frosted panels with light on the edges</string>
+    <string name="style_solid">Solid</string>
+    <string name="style_solid_hint">Calm opaque panels without glass. Also a bit lighter for slow TVs</string>
+    <string name="language_system">Same as the TV</string>
+
+    <!-- Wallpaper -->
+    <string name="wallpaper_source">Source</string>
+    <string name="wallpaper_dim">Dim the wallpaper</string>
+    <string name="wallpaper_next">Show another picture</string>
+    <string name="wallpaper_url">Picture from a link</string>
+    <string name="wallpaper_from_phone">Send a photo from your phone</string>
+    <string name="wallpaper_from_phone_hint">Scan a QR code, pick photos, done. Phone and TV must be on the same Wi-Fi</string>
+    <string name="wallpaper_from_storage">From TV storage or USB drive</string>
+    <string name="wallpaper_photos_hint">Your photos. OK sets the wallpaper, long-press deletes</string>
+    <string name="wallpaper_photo_deleted">Photo deleted</string>
+    <string name="wallpaper_applied">Wallpaper set</string>
+    <string name="source_gradient">Gradients</string>
+    <string name="source_gradient_hint">Built-in, work offline</string>
+    <string name="source_bing">Bing · picture of the day</string>
+    <string name="source_bing_hint">A new photo every day</string>
+    <string name="source_picsum">Photos from Unsplash</string>
+    <string name="source_picsum_hint">Random photos via Lorem Picsum</string>
+    <string name="source_wikimedia">Wikimedia · picture of the day</string>
+    <string name="source_wikimedia_hint">Featured photos from Wikimedia Commons</string>
+    <string name="source_art">Art · public domain paintings</string>
+    <string name="source_art_hint">Art Institute of Chicago collection</string>
+    <string name="source_nasa">NASA · space photos</string>
+    <string name="source_nasa_hint">Photos from the NASA Image and Video Library</string>
+    <string name="source_photos">My photos</string>
+    <string name="source_photos_hint">Pictures you sent from a phone or USB drive</string>
+    <string name="source_url">Link</string>
+    <string name="source_url_hint">Any picture on the internet</string>
+    <string name="gradient_aurora">Aurora</string>
+    <string name="gradient_sunset">Sunset</string>
+    <string name="gradient_ocean">Ocean</string>
+    <string name="gradient_forest">Forest</string>
+    <string name="gradient_graphite">Graphite</string>
+    <string name="gradient_midnight">Midnight</string>
+    <string name="gradient_sakura">Sakura</string>
+    <string name="gradient_desert">Desert</string>
+
+    <!-- Upload from phone -->
+    <string name="upload_title">Send photos from your phone</string>
+    <string name="upload_step1">1. Connect the phone to the same Wi-Fi as the TV</string>
+    <string name="upload_step2">2. Scan the QR code with the camera</string>
+    <string name="upload_step3">3. Pick photos: they appear here right away</string>
+    <string name="upload_received">Received: %1$d</string>
+    <string name="upload_no_network">The TV is not connected to a network</string>
+    <string name="upload_page_title">Send to PavlovTV</string>
+    <string name="upload_page_hint">Choose one or more photos. They are resized on your phone and sent to the TV.</string>
+    <string name="upload_page_choose">Choose photos</string>
+    <string name="upload_page_sending">Sending</string>
+    <string name="upload_page_done">Done! The photo is on the TV.</string>
+    <string name="upload_page_failed">Could not send this photo.</string>
+    <string name="storage_title">Pictures on this TV</string>
+    <string name="storage_permission">Allow access to photos to see pictures on the TV and USB drives.</string>
+    <string name="storage_empty">No pictures found. Plug in a USB drive with photos.</string>
+    <string name="storage_importing">Preparing the picture…</string>
+    <string name="storage_failed">Could not read this picture</string>
+
+    <!-- Screensaver -->
+    <string name="saver_how_to">PavlovTV adds a slideshow screensaver. Turn it on in Android settings → Device preferences → Screensaver → PavlovTV slideshow.</string>
+    <string name="saver_open_system">Open Android screensaver settings</string>
+    <string name="saver_preview">Preview</string>
+    <string name="saver_same_as_wallpaper">Same as wallpaper</string>
+    <string name="saver_options">Options</string>
+    <string name="saver_interval">Change picture every</string>
+    <string name="saver_seconds">%1$d s</string>
+    <string name="saver_show_clock">Show clock</string>
+    <string name="saver_show_weather">Show weather</string>
+    <string name="saver_motion">Slow motion</string>
+    <string name="saver_motion_hint">Gentle zoom and pan. Turn off if the TV stutters</string>
+
+    <!-- Apps -->
+    <string name="apps_long_press_hint">Tip: long-press OK on any tile to add it to favorites, move or hide it.</string>
+    <string name="apps_reset_favorites">Reset favorites</string>
+    <string name="apps_hidden">Hidden apps</string>
+    <string name="apps_hidden_empty">No hidden apps.</string>
+    <string name="apps_tap_to_show">Press OK to show it again</string>
+
+    <!-- About -->
+    <string name="about_tagline">Open-source home screen for Android TV</string>
+    <string name="about_license">Free software under the GNU GPL v3.0</string>
+    <string name="about_sources">Data sources</string>
+    <string name="about_sources_text">Weather: Open-Meteo.com (CC BY 4.0). City search: Open-Meteo Geocoding / GeoNames. Location by IP: GeoJS. Wallpapers: Bing, Lorem Picsum (Unsplash), Wikimedia Commons, Art Institute of Chicago (CC0), NASA Image Library. News: RSS feeds of the listed publishers. QR codes: ZXing.</string>
+    <string name="news_topics">Topics</string>
+    <string name="topic_ai">AI</string>
+    <string name="topic_tech">Technology</string>
+    <string name="topic_business">Business</string>
+    <string name="topic_science">Science</string>
+    <string name="topic_world">World</string>
+    <string name="recs_only_watch_next">Only “Continue watching”</string>
+    <string name="recs_only_watch_next_hint">Hide the rows of YouTube, Twitch and other apps. Lighter for slow TVs</string>
+    <string name="recs_rows">Rows on the home screen</string>
+</resources>

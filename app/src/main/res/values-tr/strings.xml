@@ -1,0 +1,232 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="screensaver_name">PavlovTV slayt gösterisi</string>
+
+    <!-- Common actions -->
+    <string name="action_launcher_settings">PavlovTV\'yi özelleştir</string>
+    <string name="action_system_settings">Android ayarları</string>
+    <string name="action_refresh">Yenile</string>
+    <string name="action_save">Kaydet</string>
+    <string name="action_cancel">İptal</string>
+    <string name="action_done">Bitti</string>
+    <string name="action_search">Ara</string>
+    <string name="action_remove">Kaldır</string>
+    <string name="tap_to_remove">Kaldırmak için OK tuşuna bas</string>
+
+    <!-- Home -->
+    <string name="home_favorites">Favoriler</string>
+    <string name="home_favorites_empty">Aşağıdaki herhangi bir uygulamada OK tuşunu basılı tut ve “Favorilere ekle” seçeneğini seç.</string>
+    <string name="home_all_apps">Tüm uygulamalar · %1$d</string>
+    <string name="home_show_widget">Ana ekranda göster</string>
+    <string name="home_sections">Ana ekran bölümleri</string>
+    <string name="home_phone_apps">Telefon uygulamalarını göster</string>
+    <string name="home_phone_apps_hint">Telefonlar için yapılmış, TV sürümü olmayan uygulamalar</string>
+    <string name="home_make_default">PavlovTV\'yi ana ekran yap</string>
+    <string name="home_make_default_hint">Bu TV\'de varsa Android “Ana ekran uygulaması” seçicisini açar</string>
+    <string name="home_make_default_fallback">Bu TV\'de ana ekran uygulaması seçicisi yok. Bir bilgisayardan şunu çalıştır: adb shell cmd package set-home-activity io.github.remdee13.pavlovtv/.MainActivity</string>
+
+    <!-- App menu -->
+    <string name="app_add_favorite">Favorilere ekle</string>
+    <string name="app_remove_favorite">Favorilerden kaldır</string>
+    <string name="app_move">Taşı</string>
+    <string name="app_move_hint">← → taşı · OK bitti</string>
+    <string name="app_hide">Uygulamayı gizle</string>
+    <string name="app_info">Uygulama bilgisi</string>
+    <string name="app_uninstall">Yüklemeyi kaldır</string>
+    <string name="app_launch_failed">Bu uygulama açılamadı</string>
+
+    <!-- Recommendations -->
+    <string name="recs_title">Öneriler</string>
+    <string name="recs_show">Öneri satırlarını göster</string>
+    <string name="recs_hint">YouTube, Netflix veya Plex gibi uygulamaların ana ekran için yayınladığı satırlar</string>
+    <string name="recs_watch_next">İzlemeye devam et</string>
+    <string name="recs_permission_hint">Uygulamalarından gelen önerileri görmek için erişime izin ver.</string>
+    <string name="recs_permission_button">Erişime izin ver</string>
+    <string name="recs_status_ok">Öneriler açık.</string>
+    <string name="recs_status_empty">Erişim verildi ama henüz hiçbir uygulama öneri yayınlamadı. YouTube\'u veya başka bir uygulamayı bir kez aç.</string>
+    <string name="recs_status_permission">PavlovTV\'nin önerileri okuyabilmesi için “TV programları” izni gerekiyor.</string>
+    <string name="recs_status_unsupported">Bu TV, öneri satırlarını diğer başlatıcılara sunmuyor.</string>
+    <string name="recs_adb_hint">Bir şey olmazsa bir bilgisayardan bir kez şunu çalıştır: adb shell pm grant io.github.remdee13.pavlovtv android.permission.READ_TV_LISTINGS</string>
+
+    <!-- Weather -->
+    <string name="weather_title">Hava durumu</string>
+    <string name="weather_loading">Yükleniyor…</string>
+    <string name="weather_unavailable">Hava durumu verisi yok. İnternet bağlantısını kontrol et.</string>
+    <string name="weather_feels_like">hissedilen %1$s</string>
+    <string name="weather_humidity">Nem %%%1$d</string>
+    <string name="weather_wind">Rüzgar %1$s</string>
+    <string name="unit_kmh">km/sa</string>
+    <string name="unit_mph">mil/sa</string>
+    <string name="weather_cities">Şehirler</string>
+    <string name="weather_city">Şehir</string>
+    <string name="weather_auto">Otomatik algıla</string>
+    <string name="weather_auto_hint">İnternet bağlantının yaklaşık konumunu kullanır</string>
+    <string name="weather_pick_city">Şehir seç</string>
+    <string name="weather_add_city">Şehir ekle</string>
+    <string name="weather_extra_cities">Diğer şehirler (en fazla 3)</string>
+    <string name="weather_units">Birimler</string>
+    <string name="weather_attribution">Hava durumu verileri: Open-Meteo.com</string>
+    <string name="weather_clear">Açık</string>
+    <string name="weather_mostly_clear">Çoğunlukla açık</string>
+    <string name="weather_partly_cloudy">Parçalı bulutlu</string>
+    <string name="weather_overcast">Bulutlu</string>
+    <string name="weather_fog">Sis</string>
+    <string name="weather_drizzle">Çisenti</string>
+    <string name="weather_rain">Yağmur</string>
+    <string name="weather_heavy_rain">Kuvvetli yağmur</string>
+    <string name="weather_showers">Sağanak</string>
+    <string name="weather_snow">Kar</string>
+    <string name="weather_sleet">Karla karışık yağmur</string>
+    <string name="weather_thunder">Gök gürültülü fırtına</string>
+    <string name="weather_thunder_hail">Fırtına ve dolu</string>
+    <string name="city_search_placeholder">Şehir adı</string>
+    <string name="city_searching">Aranıyor…</string>
+    <string name="city_not_found">Hiçbir şey bulunamadı. Farklı bir yazım dene.</string>
+
+    <!-- Clocks -->
+    <string name="clocks_24h">24 saat biçimi</string>
+    <string name="clocks_list">Saatler · %1$d / %2$d</string>
+    <string name="clocks_add">Saat ekle</string>
+    <string name="clocks_analog">Analog</string>
+    <string name="clocks_digital">Dijital</string>
+    <string name="clocks_reset">Varsayılanlara sıfırla</string>
+    <string name="clock_same_time">aynı saat</string>
+    <string name="clock_offset_hours">%1$s sa</string>
+    <string name="clock_tomorrow">yarın</string>
+    <string name="clock_yesterday">dün</string>
+
+    <!-- News -->
+    <string name="news_title">Haberler</string>
+    <string name="news_loading">Başlıklar yükleniyor…</string>
+    <string name="news_empty">Henüz haber yok. Ayarlar → Haberler bölümünden herhangi bir site veya RSS ekle.</string>
+    <string name="news_just_now">az önce</string>
+    <string name="news_minutes_ago">%1$d dk önce</string>
+    <string name="news_hours_ago">%1$d sa önce</string>
+    <string name="news_sources">Kaynaklar</string>
+    <string name="news_qr_hint">Telefonunda okumak için tara</string>
+    <string name="news_open_hint">veya TV tarayıcısında açmak için OK tuşuna bas</string>
+    <string name="news_no_browser">Bu TV\'de yüklü tarayıcı yok</string>
+    <string name="news_custom">Kaynakların</string>
+    <string name="news_add_feed">Web sitesi veya RSS ekle</string>
+    <string name="news_add_feed_hint">bbc.com gibi bir site, bir YouTube kanalı veya RSS bağlantısı: PavlovTV beslemeyi kendisi bulur</string>
+    <string name="news_add_from_phone">Telefondan ekle</string>
+    <string name="news_add_from_phone_hint">QR kodu tara ve herhangi bir bağlantıyı yapıştır. Kumandayla yazmaktan daha kolay</string>
+    <string name="news_add">Ekle</string>
+    <string name="news_feed_placeholder">bbc.com veya https://…/rss</string>
+    <string name="news_feed_checking">Bu sitede haberler aranıyor…</string>
+    <string name="news_feed_added">Eklendi: %1$s</string>
+    <string name="news_feed_not_found">Bu adreste haber beslemesi bulunamadı. Sitenin ana sayfasını veya RSS bağlantısını dene</string>
+    <string name="news_catalog">Hazır kaynaklar</string>
+    <string name="news_phone_page_title">PavlovTV için haberler</string>
+    <string name="news_phone_page_hint">Bir web sitesi adresi, YouTube kanalı veya RSS bağlantısı yapıştır. İstediğin kadar ekleyebilirsin.</string>
+    <string name="news_phone_step3">3. Herhangi bir bağlantı yapıştır: kaynak hemen TV\'de görünür</string>
+
+    <!-- Settings -->
+    <string name="settings_title">Ayarlar</string>
+    <string name="settings_appearance">Görünüm</string>
+    <string name="settings_wallpaper">Duvar kağıdı</string>
+    <string name="settings_screensaver">Ekran koruyucu</string>
+    <string name="settings_weather">Hava durumu</string>
+    <string name="settings_clocks">Dünya saati</string>
+    <string name="settings_news">Haberler</string>
+    <string name="settings_home">Ana ekran</string>
+    <string name="settings_apps">Uygulamalar</string>
+    <string name="settings_language">Dil</string>
+    <string name="settings_about">Hakkında</string>
+    <string name="appearance_style">Arayüz stili</string>
+    <string name="style_glass">Liquid Glass</string>
+    <string name="style_glass_hint">Kenarlarında ışık olan, buzlu cam gibi saydam paneller</string>
+    <string name="style_solid">Opak</string>
+    <string name="style_solid_hint">Camsız, sade ve opak paneller. Yavaş televizyonlar için de biraz daha hafif</string>
+    <string name="language_system">TV ile aynı</string>
+
+    <!-- Wallpaper -->
+    <string name="wallpaper_source">Kaynak</string>
+    <string name="wallpaper_dim">Duvar kağıdını karart</string>
+    <string name="wallpaper_next">Başka bir resim göster</string>
+    <string name="wallpaper_url">Bağlantıdan resim</string>
+    <string name="wallpaper_from_phone">Telefonundan fotoğraf gönder</string>
+    <string name="wallpaper_from_phone_hint">QR kodu tara, fotoğrafları seç, bitti. Telefon ve TV aynı Wi-Fi ağında olmalı</string>
+    <string name="wallpaper_from_storage">TV belleğinden veya USB bellekten</string>
+    <string name="wallpaper_photos_hint">Fotoğrafların. OK duvar kağıdı yapar, uzun basmak siler</string>
+    <string name="wallpaper_photo_deleted">Fotoğraf silindi</string>
+    <string name="wallpaper_applied">Duvar kağıdı ayarlandı</string>
+    <string name="source_gradient">Renk geçişleri</string>
+    <string name="source_gradient_hint">Yerleşik, çevrimdışı çalışır</string>
+    <string name="source_bing">Bing · günün resmi</string>
+    <string name="source_bing_hint">Her gün yeni bir fotoğraf</string>
+    <string name="source_picsum">Unsplash fotoğrafları</string>
+    <string name="source_picsum_hint">Lorem Picsum üzerinden rastgele fotoğraflar</string>
+    <string name="source_wikimedia">Wikimedia · günün resmi</string>
+    <string name="source_wikimedia_hint">Wikimedia Commons\'tan seçkin fotoğraflar</string>
+    <string name="source_art">Sanat · kamu malı tablolar</string>
+    <string name="source_art_hint">Art Institute of Chicago koleksiyonu</string>
+    <string name="source_nasa">NASA · uzay fotoğrafları</string>
+    <string name="source_nasa_hint">NASA görüntü ve video kütüphanesinden fotoğraflar</string>
+    <string name="source_photos">Fotoğraflarım</string>
+    <string name="source_photos_hint">Telefondan veya USB bellekten gönderdiğin resimler</string>
+    <string name="source_url">Bağlantı</string>
+    <string name="source_url_hint">İnternetteki herhangi bir resim</string>
+    <string name="gradient_aurora">Aurora</string>
+    <string name="gradient_sunset">Gün batımı</string>
+    <string name="gradient_ocean">Okyanus</string>
+    <string name="gradient_forest">Orman</string>
+    <string name="gradient_graphite">Grafit</string>
+    <string name="gradient_midnight">Gece yarısı</string>
+    <string name="gradient_sakura">Sakura</string>
+    <string name="gradient_desert">Çöl</string>
+
+    <!-- Upload from phone -->
+    <string name="upload_title">Telefonundan fotoğraf gönder</string>
+    <string name="upload_step1">1. Telefonu TV ile aynı Wi-Fi ağına bağla</string>
+    <string name="upload_step2">2. QR kodu kamerayla tara</string>
+    <string name="upload_step3">3. Fotoğrafları seç: hemen burada görünürler</string>
+    <string name="upload_received">Alınan: %1$d</string>
+    <string name="upload_no_network">TV bir ağa bağlı değil</string>
+    <string name="upload_page_title">PavlovTV\'ye gönder</string>
+    <string name="upload_page_hint">Bir veya daha fazla fotoğraf seç. Fotoğraflar telefonunda küçültülüp TV\'ye gönderilir.</string>
+    <string name="upload_page_choose">Fotoğraf seç</string>
+    <string name="upload_page_sending">Gönderiliyor</string>
+    <string name="upload_page_done">Tamam! Fotoğraf TV\'de.</string>
+    <string name="upload_page_failed">Bu fotoğraf gönderilemedi.</string>
+    <string name="storage_title">Bu TV\'deki resimler</string>
+    <string name="storage_permission">TV\'deki ve USB belleklerdeki resimleri görmek için fotoğraflara erişime izin ver.</string>
+    <string name="storage_empty">Resim bulunamadı. Fotoğraflı bir USB bellek tak.</string>
+    <string name="storage_importing">Resim hazırlanıyor…</string>
+    <string name="storage_failed">Bu resim okunamadı</string>
+
+    <!-- Screensaver -->
+    <string name="saver_how_to">PavlovTV bir slayt gösterisi ekran koruyucusu ekler. Açmak için: Android ayarları → Cihaz Tercihleri → Ekran koruyucu → PavlovTV slayt gösterisi.</string>
+    <string name="saver_open_system">Android ekran koruyucu ayarlarını aç</string>
+    <string name="saver_preview">Önizleme</string>
+    <string name="saver_same_as_wallpaper">Duvar kağıdıyla aynı</string>
+    <string name="saver_options">Seçenekler</string>
+    <string name="saver_interval">Resim değişim aralığı</string>
+    <string name="saver_seconds">%1$d sn</string>
+    <string name="saver_show_clock">Saati göster</string>
+    <string name="saver_show_weather">Hava durumunu göster</string>
+    <string name="saver_motion">Yavaş hareket</string>
+    <string name="saver_motion_hint">Hafif yakınlaştırma ve kaydırma. TV takılırsa kapat</string>
+
+    <!-- Apps -->
+    <string name="apps_long_press_hint">İpucu: Favorilere eklemek, taşımak veya gizlemek için herhangi bir kutucukta OK tuşunu basılı tut.</string>
+    <string name="apps_reset_favorites">Favorileri sıfırla</string>
+    <string name="apps_hidden">Gizli uygulamalar</string>
+    <string name="apps_hidden_empty">Gizli uygulama yok.</string>
+    <string name="apps_tap_to_show">Tekrar göstermek için OK tuşuna bas</string>
+
+    <!-- About -->
+    <string name="about_tagline">Android TV için açık kaynaklı ana ekran</string>
+    <string name="about_license">GNU GPL v3.0 lisanslı özgür yazılım</string>
+    <string name="about_sources">Veri kaynakları</string>
+    <string name="about_sources_text">Hava durumu: Open-Meteo.com (CC BY 4.0). Şehir arama: Open-Meteo Geocoding / GeoNames. IP ile konum: GeoJS. Duvar kağıtları: Bing, Lorem Picsum (Unsplash), Wikimedia Commons, Art Institute of Chicago (CC0), NASA Image Library. Haberler: listelenen yayıncıların RSS beslemeleri. QR kodları: ZXing.</string>
+    <string name="news_topics">Konular</string>
+    <string name="topic_ai">Yapay zekâ</string>
+    <string name="topic_tech">Teknoloji</string>
+    <string name="topic_business">İş dünyası</string>
+    <string name="topic_science">Bilim</string>
+    <string name="topic_world">Dünya</string>
+    <string name="recs_only_watch_next">Yalnızca “İzlemeye devam et”</string>
+    <string name="recs_only_watch_next_hint">YouTube, Twitch ve diğer uygulamaların satırlarını gizle. Yavaş TV\'ler için daha hafif</string>
+    <string name="recs_rows">Ana ekrandaki satırlar</string>
+</resources>

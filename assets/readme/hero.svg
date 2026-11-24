@@ -1,0 +1,157 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="440" viewBox="0 0 1200 440" role="img" aria-labelledby="title desc">
+  <title id="title">PavlovTV — open-source launcher for Android TV and Google TV</title>
+  <desc id="desc">The PavlovTV name and tagline next to a TV showing the launcher: a clock, glass weather, world clock and news widgets, a row of app tiles and recommendation thumbnails over an aurora wallpaper.</desc>
+
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#050B1A"/>
+      <stop offset="1" stop-color="#0B1F3A"/>
+    </linearGradient>
+    <radialGradient id="glowTeal" cx="0.5" cy="0.5" r="0.5">
+      <stop offset="0" stop-color="#1DE9B6" stop-opacity="0.34"/>
+      <stop offset="1" stop-color="#1DE9B6" stop-opacity="0"/>
+    </radialGradient>
+    <radialGradient id="glowViolet" cx="0.5" cy="0.5" r="0.5">
+      <stop offset="0" stop-color="#7C4DFF" stop-opacity="0.5"/>
+      <stop offset="1" stop-color="#7C4DFF" stop-opacity="0"/>
+    </radialGradient>
+    <radialGradient id="glowBlue" cx="0.5" cy="0.5" r="0.5">
+      <stop offset="0" stop-color="#2979FF" stop-opacity="0.42"/>
+      <stop offset="1" stop-color="#2979FF" stop-opacity="0"/>
+    </radialGradient>
+    <!-- Liquid Glass: milky fill plus a rim that is bright at the top-left and fades away. -->
+    <linearGradient id="glassFill" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#FFFFFF" stop-opacity="0.16"/>
+      <stop offset="1" stop-color="#FFFFFF" stop-opacity="0.06"/>
+    </linearGradient>
+    <linearGradient id="rim" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#FFFFFF" stop-opacity="0.75"/>
+      <stop offset="0.45" stop-color="#FFFFFF" stop-opacity="0.14"/>
+      <stop offset="1" stop-color="#FFFFFF" stop-opacity="0.32"/>
+    </linearGradient>
+    <linearGradient id="screen" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#071226"/>
+      <stop offset="1" stop-color="#0E2547"/>
+    </linearGradient>
+    <linearGradient id="nameGrad" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0" stop-color="#FFFFFF"/>
+      <stop offset="1" stop-color="#BFD3FF"/>
+    </linearGradient>
+    <clipPath id="screenClip">
+      <rect x="652" y="70" width="484" height="272" rx="12"/>
+    </clipPath>
+  </defs>
+
+  <!-- Background: the launcher's own "Aurora" wallpaper preset. -->
+  <rect width="1200" height="440" rx="28" fill="url(#bg)"/>
+  <circle cx="170" cy="120" r="320" fill="url(#glowTeal)"/>
+  <circle cx="1010" cy="40" r="360" fill="url(#glowViolet)"/>
+  <circle cx="760" cy="470" r="330" fill="url(#glowBlue)"/>
+
+  <!-- Title block -->
+  <g id="title-block" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif">
+    <g transform="translate(64 64)">
+      <rect width="356" height="40" rx="20" fill="url(#glassFill)" stroke="url(#rim)" stroke-width="1.4"/>
+      <circle cx="22" cy="20" r="5" fill="#1DE9B6"/>
+      <text x="38" y="26.5" font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace" font-size="16.5" letter-spacing="1.6" fill="#DCE6FF">OPEN-SOURCE TV LAUNCHER</text>
+    </g>
+    <text x="60" y="200" font-size="96" font-weight="800" letter-spacing="-3" fill="url(#nameGrad)">PavlovTV</text>
+    <text x="64" y="252" font-size="30" font-weight="500" fill="#F4F6FA">A calm, ad-free home screen</text>
+    <text x="64" y="292" font-size="30" font-weight="500" fill="#F4F6FA">for Android TV &amp; Google TV.</text>
+
+    <g font-size="19" font-weight="600" fill="#F4F6FA">
+      <g transform="translate(64 330)">
+        <rect width="142" height="40" rx="20" fill="url(#glassFill)" stroke="url(#rim)" stroke-width="1.4"/>
+        <text x="71" y="26.5" text-anchor="middle">Liquid Glass</text>
+      </g>
+      <g transform="translate(218 330)">
+        <rect width="108" height="40" rx="20" fill="url(#glassFill)" stroke="url(#rim)" stroke-width="1.4"/>
+        <text x="54" y="26.5" text-anchor="middle">Weather</text>
+      </g>
+      <g transform="translate(338 330)">
+        <rect width="132" height="40" rx="20" fill="url(#glassFill)" stroke="url(#rim)" stroke-width="1.4"/>
+        <text x="66" y="26.5" text-anchor="middle">World clock</text>
+      </g>
+      <g transform="translate(482 330)">
+        <rect width="84" height="40" rx="20" fill="url(#glassFill)" stroke="url(#rim)" stroke-width="1.4"/>
+        <text x="42" y="26.5" text-anchor="middle">News</text>
+      </g>
+    </g>
+    <text x="64" y="404" font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace" font-size="16" fill="#9FB0D0">GPL-3.0 · Android 8.0+ · 1.7 MB · 7 languages</text>
+  </g>
+
+  <!-- The TV: a simplified drawing of the real home screen. -->
+  <g id="project-proof" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif">
+    <rect x="640" y="58" width="508" height="296" rx="20" fill="#060A13" stroke="#2B3955" stroke-width="2"/>
+    <g clip-path="url(#screenClip)">
+      <rect x="652" y="70" width="484" height="272" fill="url(#screen)"/>
+      <circle cx="700" cy="120" r="180" fill="url(#glowTeal)"/>
+      <circle cx="1100" cy="80" r="200" fill="url(#glowViolet)"/>
+      <circle cx="930" cy="360" r="190" fill="url(#glowBlue)"/>
+
+      <!-- top bar -->
+      <text x="670" y="104" font-size="26" font-weight="300" fill="#FFFFFF">21:30</text>
+      <rect x="670" y="112" width="92" height="6" rx="3" fill="#FFFFFF" opacity="0.55"/>
+      <circle cx="1078" cy="94" r="12" fill="url(#glassFill)" stroke="url(#rim)" stroke-width="1"/>
+      <circle cx="1110" cy="94" r="12" fill="url(#glassFill)" stroke="url(#rim)" stroke-width="1"/>
+
+      <!-- weather widget with the icon's rising sun -->
+      <rect x="670" y="132" width="112" height="76" rx="14" fill="url(#glassFill)" stroke="url(#rim)" stroke-width="1.2"/>
+      <path d="M684 168 a13 13 0 0 1 26 0 z" fill="#FFC46B"/>
+      <line x1="680" y1="168" x2="714" y2="168" stroke="#FFFFFF" stroke-width="2" stroke-linecap="round"/>
+      <text x="720" y="170" font-size="26" font-weight="400" fill="#FFFFFF">24°</text>
+      <rect x="682" y="184" width="60" height="5" rx="2.5" fill="#FFFFFF" opacity="0.5"/>
+      <rect x="682" y="194" width="84" height="5" rx="2.5" fill="#FFFFFF" opacity="0.3"/>
+
+      <!-- world clock widget -->
+      <rect x="792" y="132" width="178" height="76" rx="14" fill="url(#glassFill)" stroke="url(#rim)" stroke-width="1.2"/>
+      <g transform="translate(822 162)">
+        <circle r="18" fill="#EEF2F8"/>
+        <line x1="0" y1="0" x2="0" y2="-11" stroke="#1B2333" stroke-width="2.2" stroke-linecap="round"/>
+        <line x1="0" y1="0" x2="9" y2="4" stroke="#1B2333" stroke-width="2.2" stroke-linecap="round"/>
+      </g>
+      <g transform="translate(881 162)">
+        <circle r="18" fill="#141B2B" stroke="#5B6B8C" stroke-width="1"/>
+        <line x1="0" y1="0" x2="-8" y2="-8" stroke="#FFFFFF" stroke-width="2.2" stroke-linecap="round"/>
+        <line x1="0" y1="0" x2="0" y2="13" stroke="#FFFFFF" stroke-width="2.2" stroke-linecap="round"/>
+      </g>
+      <g transform="translate(940 162)">
+        <circle r="18" fill="#EEF2F8"/>
+        <line x1="0" y1="0" x2="11" y2="-3" stroke="#1B2333" stroke-width="2.2" stroke-linecap="round"/>
+        <line x1="0" y1="0" x2="-4" y2="12" stroke="#FFC46B" stroke-width="1.6" stroke-linecap="round"/>
+      </g>
+      <rect x="808" y="190" width="28" height="5" rx="2.5" fill="#FFFFFF" opacity="0.5"/>
+      <rect x="867" y="190" width="28" height="5" rx="2.5" fill="#FFFFFF" opacity="0.5"/>
+      <rect x="926" y="190" width="28" height="5" rx="2.5" fill="#FFFFFF" opacity="0.5"/>
+
+      <!-- news widget -->
+      <rect x="980" y="132" width="140" height="76" rx="14" fill="url(#glassFill)" stroke="url(#rim)" stroke-width="1.2"/>
+      <rect x="992" y="144" width="34" height="6" rx="3" fill="#8AB4FF"/>
+      <rect x="992" y="160" width="112" height="7" rx="3.5" fill="#FFFFFF" opacity="0.85"/>
+      <rect x="992" y="173" width="88" height="7" rx="3.5" fill="#FFFFFF" opacity="0.85"/>
+      <rect x="992" y="192" width="40" height="5" rx="2.5" fill="#FFFFFF" opacity="0.35"/>
+
+      <!-- favorites: the first tile has focus -->
+      <rect x="664" y="222" width="94" height="54" rx="10" fill="#F4F6FA" stroke="#FFFFFF" stroke-width="2.5"/>
+      <path d="M703 239 l14 10 l-14 10 z" fill="#FF5A5F"/>
+      <rect x="770" y="226" width="86" height="48" rx="9" fill="#24314D" stroke="url(#rim)" stroke-width="1"/>
+      <circle cx="813" cy="250" r="10" fill="none" stroke="#8AB4FF" stroke-width="3"/>
+      <rect x="866" y="226" width="86" height="48" rx="9" fill="#1C3B3A" stroke="url(#rim)" stroke-width="1"/>
+      <path d="M899 258 v-16 l16 -4 v16" fill="none" stroke="#1DE9B6" stroke-width="3" stroke-linejoin="round"/>
+      <rect x="962" y="226" width="86" height="48" rx="9" fill="#3A2C55" stroke="url(#rim)" stroke-width="1"/>
+      <rect x="992" y="242" width="26" height="18" rx="3" fill="none" stroke="#C3A8FF" stroke-width="3"/>
+      <rect x="1058" y="226" width="86" height="48" rx="9" fill="#3D3322" stroke="url(#rim)" stroke-width="1"/>
+
+      <!-- recommendation row -->
+      <rect x="670" y="290" width="74" height="6" rx="3" fill="#FFFFFF" opacity="0.6"/>
+      <rect x="664" y="304" width="112" height="62" rx="9" fill="#3B5B8C"/>
+      <rect x="786" y="304" width="112" height="62" rx="9" fill="#7A4E8E"/>
+      <rect x="908" y="304" width="112" height="62" rx="9" fill="#2E7D74"/>
+      <rect x="1030" y="304" width="112" height="62" rx="9" fill="#9A6A3A"/>
+    </g>
+    <!-- screen reflection and stand -->
+    <path d="M652 82 a12 12 0 0 1 12 -12 h150 l-90 272 h-60 a12 12 0 0 1 -12 -12 z" fill="#FFFFFF" opacity="0.035"/>
+    <line x1="862" y1="374" x2="926" y2="374" stroke="#3A4A6B" stroke-width="5" stroke-linecap="round"/>
+    <line x1="894" y1="354" x2="894" y2="372" stroke="#3A4A6B" stroke-width="5"/>
+  </g>
+</svg>
