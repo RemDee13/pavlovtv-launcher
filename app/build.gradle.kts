@@ -31,8 +31,8 @@ android {
         applicationId = "io.github.remdee13.pavlovtv"
         minSdk = 26
         targetSdk = 35
-        versionCode = 1
-        versionName = "0.1.0"
+        versionCode = 2
+        versionName = "0.2.0"
         resourceConfigurations += listOf("en", "ru", "es", "tr", "de", "fr", "pt")
     }
 
@@ -100,5 +100,6 @@ dependencies {
     implementation(libs.coil.compose)
     implementation(libs.okhttp)
     implementation(libs.zxing.core)
+    implementation(libs.jsoup)
     debugImplementation(libs.compose.ui.tooling)
 }

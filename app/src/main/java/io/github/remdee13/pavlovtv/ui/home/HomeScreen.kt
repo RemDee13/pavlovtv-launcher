@@ -51,6 +51,9 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.tv.material3.Text
 import io.github.remdee13.pavlovtv.R
+import io.github.remdee13.pavlovtv.data.LauncherSettings
+import io.github.remdee13.pavlovtv.data.TempUnit
+import io.github.remdee13.pavlovtv.data.rateIds
 import io.github.remdee13.pavlovtv.data.AppEntry
 import io.github.remdee13.pavlovtv.data.RecProgram
 import io.github.remdee13.pavlovtv.data.RecStatus
@@ -66,10 +69,13 @@ import io.github.remdee13.pavlovtv.ui.longDate
 import io.github.remdee13.pavlovtv.ui.theme.Palette
 import io.github.remdee13.pavlovtv.ui.theme.Type
 import io.github.remdee13.pavlovtv.ui.timeText
-import io.github.remdee13.pavlovtv.ui.widgets.ClocksWidget
+import io.github.remdee13.pavlovtv.ui.rates.RatesWidget
+import io.github.remdee13.pavlovtv.ui.rates.RatesWidgetWidth
+import io.github.remdee13.pavlovtv.ui.rates.rememberFavoriteRates
+import io.github.remdee13.pavlovtv.ui.widgets.CitiesWidget
 import io.github.remdee13.pavlovtv.ui.widgets.NewsWidget
-import io.github.remdee13.pavlovtv.ui.widgets.WeatherWidget
-import io.github.remdee13.pavlovtv.ui.widgets.clocksWidgetWidth
+import io.github.remdee13.pavlovtv.ui.widgets.cityList
+import io.github.remdee13.pavlovtv.ui.widgets.CitiesWidgetWidth
 import io.github.remdee13.pavlovtv.wallpaper.WallpaperModel
 import java.time.Instant
 import java.time.ZoneId
@@ -83,7 +89,7 @@ class HomeActions(
     val openLauncherSettings: () -> Unit,
     val openSystemSettings: () -> Unit,
     val openWeather: () -> Unit,
-    val openClocks: () -> Unit,
+    val openRates: () -> Unit,
     val openNews: (Int) -> Unit,
     val launchApp: (AppEntry) -> Unit,
     val appOptions: (AppEntry) -> Unit,
@@ -170,20 +176,23 @@ fun HomeScreen(
         ) {
             item(key = "top") { TopBar(settings.use24h, (wallpaper as? WallpaperModel.Image)?.caption.orEmpty(), actions) }
 
-            if (settings.showWeather || settings.showClocks || settings.showNews) {
+            if (settings.showWeather || settings.showRates || settings.showNews) {
                 item(key = "widgets") {
                     Row(
                         Modifier.fillMaxWidth().padding(horizontal = ScreenPadding).focusRestorer(),
                         horizontalArrangement = Arrangement.spacedBy(12.dp),
                     ) {
-                        if (settings.showWeather) WeatherWidget(weather, actions.openWeather, Modifier.width(250.dp))
-                        if (settings.showClocks) {
-                            val clocks = settings.effectiveClocks
-                            ClocksWidget(clocks, settings.use24h, actions.openClocks, Modifier.width(clocksWidgetWidth(clocks.size)))
+                        if (settings.showWeather) {
+                            val cities = cityList(settings, weather)
+                            CitiesWidget(cities, settings.use24h, weather?.unit ?: TempUnit.CELSIUS, actions.openWeather, Modifier.width(CitiesWidgetWidth))
+                        }
+                        if (settings.showRates) {
+                            val rates = rememberFavoriteRates(vm.rateQuotes, vm::refreshRates, settings.rateIds.take(LauncherSettings.HOME_RATES))
+                            RatesWidget(rates, actions.openRates, Modifier.width(RatesWidgetWidth))
                         }
                         if (settings.showNews) {
                             val index = if (news.isEmpty()) 0 else newsIndex % news.size
-                            NewsWidget(news.getOrNull(index), index, news.size, newsLoading, { actions.openNews(index) }, Modifier.weight(1f))
+                            NewsWidget(news.getOrNull(index), index, news.size, newsLoading, vm::previewImage, { actions.openNews(index) }, Modifier.weight(1f))
                         } else {
                             Spacer(Modifier.weight(1f))
                         }

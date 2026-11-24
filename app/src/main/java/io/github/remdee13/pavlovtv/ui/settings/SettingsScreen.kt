@@ -30,6 +30,7 @@ import androidx.compose.material.icons.outlined.Add
 import androidx.compose.material.icons.outlined.Apps
 import androidx.compose.material.icons.outlined.AutoAwesome
 import androidx.compose.material.icons.outlined.Cloud
+import androidx.compose.material.icons.outlined.CurrencyExchange
 import androidx.compose.material.icons.outlined.Dashboard
 import androidx.compose.material.icons.outlined.Delete
 import androidx.compose.material.icons.outlined.Home
@@ -39,11 +40,14 @@ import androidx.compose.material.icons.outlined.Link
 import androidx.compose.material.icons.outlined.Newspaper
 import androidx.compose.material.icons.outlined.PhoneAndroid
 import androidx.compose.material.icons.outlined.PlayCircle
+import androidx.compose.material.icons.outlined.Public
 import androidx.compose.material.icons.outlined.Refresh
 import androidx.compose.material.icons.outlined.Schedule
+import androidx.compose.material.icons.outlined.Search
 import androidx.compose.material.icons.outlined.Settings
 import androidx.compose.material.icons.outlined.SettingsSuggest
 import androidx.compose.material.icons.outlined.SkipNext
+import androidx.compose.material.icons.outlined.Tag
 import androidx.compose.material.icons.outlined.Usb
 import androidx.compose.material.icons.outlined.Wallpaper
 import androidx.compose.runtime.Composable
@@ -85,6 +89,7 @@ import io.github.remdee13.pavlovtv.data.AppLocale
 import io.github.remdee13.pavlovtv.data.ClockStyle
 import io.github.remdee13.pavlovtv.data.Http
 import io.github.remdee13.pavlovtv.data.LauncherSettings
+import io.github.remdee13.pavlovtv.data.NewsSearch
 import io.github.remdee13.pavlovtv.data.NewsSources
 import io.github.remdee13.pavlovtv.data.NewsTopic
 import io.github.remdee13.pavlovtv.data.OnlineSource
@@ -93,7 +98,6 @@ import io.github.remdee13.pavlovtv.data.SaverMode
 import io.github.remdee13.pavlovtv.data.TempUnit
 import io.github.remdee13.pavlovtv.data.UiStyle
 import io.github.remdee13.pavlovtv.data.WallpaperKind
-import io.github.remdee13.pavlovtv.data.WorldClock
 import io.github.remdee13.pavlovtv.ui.LauncherViewModel
 import io.github.remdee13.pavlovtv.ui.components.GlassButton
 import io.github.remdee13.pavlovtv.ui.components.GlassCard
@@ -113,8 +117,9 @@ enum class SettingsPage(@StringRes val title: Int, val icon: ImageVector) {
     APPEARANCE(R.string.settings_appearance, Icons.Outlined.AutoAwesome),
     WALLPAPER(R.string.settings_wallpaper, Icons.Outlined.Wallpaper),
     SCREENSAVER(R.string.settings_screensaver, Icons.Outlined.PlayCircle),
-    WEATHER(R.string.settings_weather, Icons.Outlined.Cloud),
-    CLOCKS(R.string.settings_clocks, Icons.Outlined.Schedule),
+    /** Cities: each one has a clock and weather. */
+    WEATHER(R.string.settings_cities, Icons.Outlined.Public),
+    RATES(R.string.settings_rates, Icons.Outlined.CurrencyExchange),
     NEWS(R.string.settings_news, Icons.Outlined.Newspaper),
     HOME(R.string.settings_home, Icons.Outlined.Dashboard),
     APPS(R.string.settings_apps, Icons.Outlined.Apps),
@@ -134,10 +139,12 @@ class SettingsActions(
 private sealed interface SettingsDialog {
     data object MainCity : SettingsDialog
     data object ExtraCity : SettingsDialog
-    data object AddClock : SettingsDialog
-    data class ClockOptions(val index: Int) : SettingsDialog
+    data class CityOptions(val key: String) : SettingsDialog
     data object AddFeed : SettingsDialog
     data object PhoneFeed : SettingsDialog
+    data object TopicSearch : SettingsDialog
+    data object AddRate : SettingsDialog
+    data class RateOptions(val id: String) : SettingsDialog
     data object WallpaperUrl : SettingsDialog
     data object Upload : SettingsDialog
     data object Storage : SettingsDialog
@@ -221,8 +228,8 @@ fun SettingsScreen(vm: LauncherViewModel, initialPage: SettingsPage, onBack: () 
                         SettingsPage.APPEARANCE -> appearancePage(vm, s)
                         SettingsPage.WALLPAPER -> wallpaperPage(vm, s) { dialog = it }
                         SettingsPage.SCREENSAVER -> screensaverPage(vm, s, actions)
-                        SettingsPage.WEATHER -> weatherPage(vm, s) { dialog = it }
-                        SettingsPage.CLOCKS -> clocksPage(vm, s) { dialog = it }
+                        SettingsPage.WEATHER -> citiesPage(vm, s) { dialog = it }
+                        SettingsPage.RATES -> ratesPage(vm, s, onAdd = { dialog = SettingsDialog.AddRate }, onOptions = { dialog = SettingsDialog.RateOptions(it) })
                         SettingsPage.NEWS -> newsPage(vm, s) { dialog = it }
                         SettingsPage.HOME -> homePage(vm, s, actions)
                         SettingsPage.APPS -> appsPage(vm)
@@ -250,17 +257,22 @@ fun SettingsScreen(vm: LauncherViewModel, initialPage: SettingsPage, onBack: () 
             onDismiss = { dialog = null },
             onPick = { place -> if (place != null) vm.update { it.copy(extraPlaces = (it.extraPlaces + place).distinctBy { p -> p.key }.take(LauncherSettings.MAX_EXTRA_PLACES)) } },
         )
-        SettingsDialog.AddClock -> CitySearchDialog(
-            title = stringResource(R.string.clocks_add),
-            search = vm::searchPlaces,
-            onDismiss = { dialog = null },
-            onPick = { place ->
-                if (place != null) vm.update { it.copy(clocks = (it.effectiveClocks + WorldClock(place)).take(LauncherSettings.MAX_CLOCKS)) }
-            },
-        )
-        is SettingsDialog.ClockOptions -> ClockOptionsDialog(vm, s, d.index) { dialog = null }
+        is SettingsDialog.CityOptions -> CityOptionsDialog(vm, s, d.key) { dialog = null }
+        SettingsDialog.AddRate -> AddRateDialog(vm, s) { dialog = null }
+        is SettingsDialog.RateOptions -> RateOptionsDialog(vm, s, d.id) { dialog = null }
         SettingsDialog.AddFeed -> AddFeedDialog(vm::addFeed) { dialog = null }
         SettingsDialog.PhoneFeed -> PhoneFeedDialog(vm::addFeed) { dialog = null }
+        SettingsDialog.TopicSearch -> TopicSearchDialog(
+            language = vm.language,
+            chosen = s.newsSearches,
+            onToggle = { words ->
+                vm.update { st ->
+                    val on = st.newsSearches.any { it.equals(words, ignoreCase = true) }
+                    st.copy(newsSearches = if (on) st.newsSearches.filterNot { it.equals(words, ignoreCase = true) } else (st.newsSearches + words).take(NewsSearch.MAX))
+                }
+            },
+            onDismiss = { dialog = null },
+        )
         SettingsDialog.WallpaperUrl -> TextInputDialog(
             title = stringResource(R.string.wallpaper_url),
             initial = s.wallpaper.url.ifEmpty { "https://" },
@@ -310,6 +322,14 @@ private fun LazyListScope.appearancePage(vm: LauncherViewModel, s: LauncherSetti
             subtitle = stringResource(R.string.style_glass_hint),
             selected = s.uiStyle == UiStyle.GLASS,
             onClick = { vm.update { it.copy(uiStyle = UiStyle.GLASS) } },
+        )
+    }
+    item {
+        ChoiceRow(
+            title = stringResource(R.string.style_dark),
+            subtitle = stringResource(R.string.style_dark_hint),
+            selected = s.uiStyle == UiStyle.DARK,
+            onClick = { vm.update { it.copy(uiStyle = UiStyle.DARK) } },
         )
     }
     item {
@@ -460,10 +480,11 @@ private fun LazyListScope.screensaverPage(vm: LauncherViewModel, s: LauncherSett
     }
     item { ToggleRow(stringResource(R.string.saver_show_clock), c.showClock, { v -> vm.update { it.copy(screensaver = it.screensaver.copy(showClock = v)) } }) }
     item { ToggleRow(stringResource(R.string.saver_show_weather), c.showWeather, { v -> vm.update { it.copy(screensaver = it.screensaver.copy(showWeather = v)) } }) }
+    item { ToggleRow(stringResource(R.string.saver_show_rates), c.showRates, { v -> vm.update { it.copy(screensaver = it.screensaver.copy(showRates = v)) } }) }
     item { ToggleRow(stringResource(R.string.saver_motion), c.motion, { v -> vm.update { it.copy(screensaver = it.screensaver.copy(motion = v)) } }, subtitle = stringResource(R.string.saver_motion_hint)) }
 }
 
-private fun LazyListScope.weatherPage(vm: LauncherViewModel, s: LauncherSettings, open: (SettingsDialog) -> Unit) {
+private fun LazyListScope.citiesPage(vm: LauncherViewModel, s: LauncherSettings, open: (SettingsDialog) -> Unit) {
     item { ToggleRow(stringResource(R.string.home_show_widget), s.showWeather, { v -> vm.update { it.copy(showWeather = v) } }) }
     item {
         val weather by vm.weather.collectAsState()
@@ -474,13 +495,18 @@ private fun LazyListScope.weatherPage(vm: LauncherViewModel, s: LauncherSettings
         }
         SettingRow(stringResource(R.string.weather_city), onClick = { open(SettingsDialog.MainCity) }, subtitle = city, icon = Icons.Outlined.Home)
     }
-    item { PageHeader(stringResource(R.string.weather_extra_cities)) }
+    item { PageHeader(stringResource(R.string.cities_more, s.extraPlaces.size, LauncherSettings.MAX_EXTRA_PLACES)) }
+    if (s.extraPlaces.size >= LauncherSettings.HOME_CITIES) {
+        item { Hint(stringResource(R.string.cities_home_hint, LauncherSettings.HOME_CITIES)) }
+    }
     items(s.extraPlaces, key = { "extra_" + it.key }) { place ->
+        val style = s.clockStyles[place.key] ?: ClockStyle.ANALOG
         SettingRow(
             title = place.name,
-            subtitle = stringResource(R.string.tap_to_remove),
-            onClick = { vm.update { it.copy(extraPlaces = it.extraPlaces - place) } },
-            trailing = { Icon(Icons.Outlined.Delete, contentDescription = null, tint = Palette.TextTertiary) },
+            subtitle = listOf(place.country, stringResource(if (style == ClockStyle.ANALOG) R.string.clocks_analog else R.string.clocks_digital), place.timezone)
+                .filter { it.isNotEmpty() }.joinToString(" · "),
+            onClick = { open(SettingsDialog.CityOptions(place.key)) },
+            icon = Icons.Outlined.Schedule,
         )
     }
     if (s.extraPlaces.size < LauncherSettings.MAX_EXTRA_PLACES) {
@@ -489,68 +515,60 @@ private fun LazyListScope.weatherPage(vm: LauncherViewModel, s: LauncherSettings
     item { PageHeader(stringResource(R.string.weather_units)) }
     item { ChoiceRow("°C", s.tempUnit == TempUnit.CELSIUS, { vm.update { it.copy(tempUnit = TempUnit.CELSIUS) } }) }
     item { ChoiceRow("°F", s.tempUnit == TempUnit.FAHRENHEIT, { vm.update { it.copy(tempUnit = TempUnit.FAHRENHEIT) } }) }
+    item { ToggleRow(stringResource(R.string.clocks_24h), s.use24h, { v -> vm.update { it.copy(use24h = v) } }) }
     item { Hint(stringResource(R.string.weather_attribution)) }
 }
 
-private fun LazyListScope.clocksPage(vm: LauncherViewModel, s: LauncherSettings, open: (SettingsDialog) -> Unit) {
-    val clocks = s.effectiveClocks
-    item { ToggleRow(stringResource(R.string.home_show_widget), s.showClocks, { v -> vm.update { it.copy(showClocks = v) } }) }
-    item { ToggleRow(stringResource(R.string.clocks_24h), s.use24h, { v -> vm.update { it.copy(use24h = v) } }) }
-    item { PageHeader(stringResource(R.string.clocks_list, clocks.size, LauncherSettings.MAX_CLOCKS)) }
-    itemsIndexed(clocks, key = { i, c -> "clock_$i${c.place.key}" }) { index, clock ->
-        SettingRow(
-            title = clock.place.name,
-            subtitle = stringResource(if (clock.style == ClockStyle.ANALOG) R.string.clocks_analog else R.string.clocks_digital) + " · " + clock.place.timezone,
-            onClick = { open(SettingsDialog.ClockOptions(index)) },
-            icon = Icons.Outlined.Schedule,
-        )
-    }
-    if (clocks.size < LauncherSettings.MAX_CLOCKS) {
-        item { SettingRow(stringResource(R.string.clocks_add), onClick = { open(SettingsDialog.AddClock) }, icon = Icons.Outlined.Add) }
-    }
-    item { SettingRow(stringResource(R.string.clocks_reset), onClick = { vm.update { it.copy(clocks = null) } }, icon = Icons.Outlined.Refresh) }
-}
-
+/** Clock look, place in the list and removal for one of the extra cities. */
 @Composable
-private fun ClockOptionsDialog(vm: LauncherViewModel, s: LauncherSettings, index: Int, onDismiss: () -> Unit) {
-    val clocks = s.effectiveClocks
+private fun CityOptionsDialog(vm: LauncherViewModel, s: LauncherSettings, key: String, onDismiss: () -> Unit) {
     val first = remember { FocusRequester() }
-    val clock = clocks.getOrNull(index)
-    if (clock == null) {
-        androidx.compose.runtime.LaunchedEffect(Unit) { onDismiss() }
+    val start = s.extraPlaces.indexOfFirst { it.key == key }
+    val place = s.extraPlaces.getOrNull(start)
+    if (place == null) {
+        LaunchedEffect(Unit) { onDismiss() }
         return
     }
-    fun save(list: List<WorldClock>) = vm.update { it.copy(clocks = list) }
+    val style = s.clockStyles[key] ?: ClockStyle.ANALOG
+    fun setStyle(value: ClockStyle) {
+        vm.update { it.copy(clockStyles = it.clockStyles + (key to value)) }
+        onDismiss()
+    }
     GlassDialog(onDismiss = onDismiss, modifier = Modifier.width(460.dp), initialFocus = first) {
-        Text(clock.place.name, style = Type.title)
+        Text(place.name, style = Type.title)
         Row(horizontalArrangement = Arrangement.spacedBy(12.dp)) {
-            GlassButton(stringResource(R.string.clocks_analog), { save(clocks.toMutableList().also { it[index] = clock.copy(style = ClockStyle.ANALOG) }); onDismiss() }, focusRequester = first, accent = clock.style == ClockStyle.ANALOG)
-            GlassButton(stringResource(R.string.clocks_digital), { save(clocks.toMutableList().also { it[index] = clock.copy(style = ClockStyle.DIGITAL) }); onDismiss() }, accent = clock.style == ClockStyle.DIGITAL)
+            GlassButton(stringResource(R.string.clocks_analog), { setStyle(ClockStyle.ANALOG) }, focusRequester = first, accent = style == ClockStyle.ANALOG)
+            GlassButton(stringResource(R.string.clocks_digital), { setStyle(ClockStyle.DIGITAL) }, accent = style == ClockStyle.DIGITAL)
         }
-        if (clocks.size > 1) {
-            // Moving keeps the dialog open, so a clock can travel several places in one go.
+        if (s.extraPlaces.size > 1) {
+            // Moving keeps the dialog open, so a city can travel several places in one go.
             // Work on a local copy: saving is asynchronous, so quick presses must not read a stale order.
-            var at by remember { mutableIntStateOf(index) }
-            var order by remember { mutableStateOf(clocks) }
+            var at by remember { mutableIntStateOf(start) }
+            var order by remember { mutableStateOf(s.extraPlaces) }
             fun move(delta: Int) {
                 val list = order.toMutableList()
                 val to = (at + delta).coerceIn(0, list.lastIndex)
                 if (to == at) return
                 list.add(to, list.removeAt(at))
                 order = list
-                save(list)
+                vm.update { it.copy(extraPlaces = list) }
                 at = to
             }
             Row(horizontalArrangement = Arrangement.spacedBy(12.dp), verticalAlignment = Alignment.CenterVertically) {
                 Text(stringResource(R.string.app_move), style = Type.body, color = Palette.TextSecondary)
                 GlassIconButton(Icons.AutoMirrored.Outlined.ArrowBack, stringResource(R.string.app_move), { move(-1) })
-                Text("${at + 1} / ${clocks.size}", style = Type.body)
+                Text("${at + 1} / ${order.size}", style = Type.body)
                 GlassIconButton(Icons.AutoMirrored.Outlined.ArrowForward, stringResource(R.string.app_move), { move(1) })
             }
         }
-        if (clocks.size > 1) {
-            GlassButton(stringResource(R.string.action_remove), { save(clocks.filterIndexed { i, _ -> i != index }); onDismiss() }, icon = Icons.Outlined.Delete)
-        }
+        GlassButton(
+            stringResource(R.string.action_remove),
+            {
+                vm.update { st -> st.copy(extraPlaces = st.extraPlaces.filterNot { it.key == key }, clockStyles = st.clockStyles - key) }
+                onDismiss()
+            },
+            icon = Icons.Outlined.Delete,
+        )
     }
 }
 
@@ -564,8 +582,29 @@ private fun LazyListScope.newsPage(vm: LauncherViewModel, s: LauncherSettings, o
     item { ToggleRow(stringResource(R.string.home_show_widget), s.showNews, { v -> vm.update { it.copy(showNews = v) } }) }
     item { SettingRow(stringResource(R.string.action_refresh), onClick = { vm.refreshNews() }, icon = Icons.Outlined.Refresh) }
 
-    // Topics: one switch turns on every ready-made feed of that topic.
+    // Topics: search a long list or type any words; each one is a news search.
     item { PageHeader(stringResource(R.string.news_topics)) }
+    item {
+        SettingRow(
+            stringResource(R.string.news_find_topic),
+            onClick = { open(SettingsDialog.TopicSearch) },
+            icon = Icons.Outlined.Search,
+            subtitle = stringResource(R.string.news_find_topic_hint),
+        )
+    }
+    if (s.newsSearches.isNotEmpty()) {
+        item { Hint(stringResource(R.string.news_my_topics, s.newsSearches.size, NewsSearch.MAX)) }
+    }
+    items(s.newsSearches, key = { "search_$it" }) { words ->
+        SettingRow(
+            title = words,
+            subtitle = stringResource(R.string.tap_to_remove),
+            onClick = { vm.update { st -> st.copy(newsSearches = st.newsSearches - words) } },
+            icon = Icons.Outlined.Tag,
+            trailing = { Icon(Icons.Outlined.Delete, contentDescription = null, tint = Palette.TextTertiary) },
+        )
+    }
+    // Ready-made feeds: one switch turns on every feed of that topic.
     NewsTopic.entries.forEach { topic ->
         item(key = "topic_$topic") {
             val feeds = NewsSources.forTopic(topic, language)
@@ -615,8 +654,8 @@ private fun topicTitle(topic: NewsTopic): Int = when (topic) {
 private fun LazyListScope.homePage(vm: LauncherViewModel, s: LauncherSettings, actions: SettingsActions) {
     item { SettingRow(stringResource(R.string.home_make_default), onClick = actions.openHomeSettings, icon = Icons.Outlined.Home, subtitle = stringResource(R.string.home_make_default_hint)) }
     item { PageHeader(stringResource(R.string.home_sections)) }
-    item { ToggleRow(stringResource(R.string.settings_weather), s.showWeather, { v -> vm.update { it.copy(showWeather = v) } }) }
-    item { ToggleRow(stringResource(R.string.settings_clocks), s.showClocks, { v -> vm.update { it.copy(showClocks = v) } }) }
+    item { ToggleRow(stringResource(R.string.settings_cities), s.showWeather, { v -> vm.update { it.copy(showWeather = v) } }) }
+    item { ToggleRow(stringResource(R.string.settings_rates), s.showRates, { v -> vm.update { it.copy(showRates = v) } }) }
     item { ToggleRow(stringResource(R.string.settings_news), s.showNews, { v -> vm.update { it.copy(showNews = v) } }) }
     item { ToggleRow(stringResource(R.string.home_phone_apps), s.showPhoneApps, { v -> vm.update { it.copy(showPhoneApps = v) } }, subtitle = stringResource(R.string.home_phone_apps_hint)) }
     item { PageHeader(stringResource(R.string.recs_title)) }

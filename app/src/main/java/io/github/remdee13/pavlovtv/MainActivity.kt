@@ -15,6 +15,10 @@ import androidx.compose.animation.Crossfade
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.Canvas
+import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.graphics.ImageBitmap
+import androidx.compose.foundation.layout.BoxWithConstraints
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.focusable
 import androidx.compose.foundation.layout.Box
@@ -42,9 +46,10 @@ import androidx.compose.ui.input.key.type
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.layout.onSizeChanged
 import androidx.compose.ui.unit.dp
-import coil.compose.AsyncImage
 import io.github.remdee13.pavlovtv.data.AppEntry
 import io.github.remdee13.pavlovtv.data.AppLocale
+import io.github.remdee13.pavlovtv.data.LauncherSettings
+import io.github.remdee13.pavlovtv.data.rateIds
 import io.github.remdee13.pavlovtv.data.RecommendationsRepository
 import io.github.remdee13.pavlovtv.saver.Screensaver
 import io.github.remdee13.pavlovtv.saver.Slide
@@ -59,6 +64,8 @@ import io.github.remdee13.pavlovtv.ui.home.HomeActions
 import io.github.remdee13.pavlovtv.ui.home.HomeScreen
 import io.github.remdee13.pavlovtv.ui.home.LocalAppVisuals
 import io.github.remdee13.pavlovtv.ui.news.NewsScreen
+import io.github.remdee13.pavlovtv.ui.rates.RatesScreen
+import io.github.remdee13.pavlovtv.ui.rates.rememberFavoriteRates
 import io.github.remdee13.pavlovtv.ui.settings.SettingsActions
 import io.github.remdee13.pavlovtv.ui.settings.SettingsPage
 import io.github.remdee13.pavlovtv.ui.settings.SettingsScreen
@@ -67,9 +74,11 @@ import io.github.remdee13.pavlovtv.ui.theme.BackdropRenderer
 import io.github.remdee13.pavlovtv.ui.theme.LocalBackdrop
 import io.github.remdee13.pavlovtv.ui.theme.LocalUiStyle
 import io.github.remdee13.pavlovtv.ui.theme.PavlovTheme
+import io.github.remdee13.pavlovtv.ui.widgets.ClockScreen
 import io.github.remdee13.pavlovtv.ui.widgets.WeatherScreen
 import io.github.remdee13.pavlovtv.wallpaper.Gradients
 import io.github.remdee13.pavlovtv.wallpaper.WallpaperModel
+import io.github.remdee13.pavlovtv.wallpaper.WallpaperComposer
 import io.github.remdee13.pavlovtv.wallpaper.drawGradientPreset
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableSharedFlow
@@ -77,8 +86,12 @@ import kotlinx.coroutines.flow.SharedFlow
 import kotlinx.coroutines.launch
 
 private sealed interface Layer {
-    data class News(val index: Int) : Layer
-    data object Weather : Layer
+    /** [read]: open the story itself; Back then shows all headlines. */
+    data class News(val index: Int, val read: Boolean) : Layer
+    /** Weather and time of every city; [index] is the city tab, kept when switching between them. */
+    data class Weather(val index: Int = 0) : Layer
+    data class Clocks(val index: Int = 0) : Layer
+    data object Rates : Layer
     data class Settings(val page: SettingsPage) : Layer
     data object SaverPreview : Layer
 }
@@ -102,6 +115,8 @@ class MainActivity : ComponentActivity() {
                 }
             }
         }
+        // The wallpaper layer always covers the screen; a window background under it is wasted GPU work.
+        window.setBackgroundDrawable(null)
     }
 
     override fun onResume() {
@@ -180,9 +195,9 @@ private fun Root(vm: LauncherViewModel, homePressed: SharedFlow<Unit>) {
         HomeActions(
             openLauncherSettings = { layer = Layer.Settings(SettingsPage.APPEARANCE) },
             openSystemSettings = { activity.start(Intent(Settings.ACTION_SETTINGS)) },
-            openWeather = { layer = Layer.Weather },
-            openClocks = { layer = Layer.Settings(SettingsPage.CLOCKS) },
-            openNews = { layer = Layer.News(it) },
+            openWeather = { layer = Layer.Weather() },
+            openRates = { layer = Layer.Rates },
+            openNews = { layer = Layer.News(it, read = true) },
             launchApp = { app ->
                 if (!graph.apps.launch(activity, app)) Toast.makeText(activity, R.string.app_launch_failed, Toast.LENGTH_SHORT).show()
             },
@@ -208,8 +223,18 @@ private fun Root(vm: LauncherViewModel, homePressed: SharedFlow<Unit>) {
 
             when (val l = layer) {
                 null -> Unit
-                is Layer.News -> NewsScreen(vm, l.index, onBack = { layer = null }, onOpenSettings = { layer = Layer.Settings(SettingsPage.NEWS) })
-                Layer.Weather -> WeatherScreen(vm, onBack = { layer = null }, onOpenSettings = { layer = Layer.Settings(SettingsPage.WEATHER) })
+                is Layer.News -> NewsScreen(vm, l.index, l.read, onBack = { layer = null }, onOpenSettings = { layer = Layer.Settings(SettingsPage.NEWS) })
+                is Layer.Weather -> WeatherScreen(
+                    vm, l.index, onBack = { layer = null },
+                    onOpenSettings = { layer = Layer.Settings(SettingsPage.WEATHER) },
+                    onOpenTime = { layer = Layer.Clocks(it) },
+                )
+                is Layer.Clocks -> ClockScreen(
+                    vm, l.index, onBack = { layer = null },
+                    onOpenSettings = { layer = Layer.Settings(SettingsPage.WEATHER) },
+                    onOpenWeather = { layer = Layer.Weather(it) },
+                )
+                Layer.Rates -> RatesScreen(vm, onBack = { layer = null }, onOpenSettings = { layer = Layer.Settings(SettingsPage.RATES) })
                 is Layer.Settings -> SettingsScreen(
                     vm = vm,
                     initialPage = l.page,
@@ -258,27 +283,22 @@ private fun Root(vm: LauncherViewModel, homePressed: SharedFlow<Unit>) {
 
 @Composable
 private fun WallpaperLayer(model: WallpaperModel, dim: Int) {
-    Box(Modifier.fillMaxSize()) {
-        Crossfade(targetState = model, animationSpec = tween(900), label = "wallpaper") { m ->
-            when (m) {
-                is WallpaperModel.Gradient -> Canvas(Modifier.fillMaxSize()) { drawGradientPreset(Gradients.get(m.index)) }
-                is WallpaperModel.Image -> Box(Modifier.fillMaxSize()) {
-                    // Gradient underneath in case the picture cannot be loaded (offline, bad URL).
-                    Canvas(Modifier.fillMaxSize()) { drawGradientPreset(Gradients.get(0)) }
-                    AsyncImage(model = m.data, contentDescription = null, contentScale = ContentScale.Crop, modifier = Modifier.fillMaxSize())
-                }
+    val context = LocalContext.current
+    BoxWithConstraints(Modifier.fillMaxSize()) {
+        val width = constraints.maxWidth
+        val height = constraints.maxHeight
+        // One pre-composed opaque picture (wallpaper + gradient + dimming); the previous one stays
+        // on screen until the next is ready.
+        val picture by produceState<ImageBitmap?>(null, model, dim, width, height) {
+            WallpaperComposer.render(context, model, dim, width, height)?.let { value = it }
+        }
+        Crossfade(targetState = picture, animationSpec = tween(700), label = "wallpaper") { bitmap ->
+            if (bitmap != null) {
+                Image(bitmap, contentDescription = null, contentScale = ContentScale.FillBounds, modifier = Modifier.fillMaxSize())
+            } else {
+                Canvas(Modifier.fillMaxSize()) { drawGradientPreset(Gradients.get(0)) }
             }
         }
-        Box(
-            Modifier.fillMaxSize().background(
-                Brush.verticalGradient(
-                    0f to Color.Black.copy(alpha = 0.42f),
-                    0.45f to Color.Black.copy(alpha = 0.08f),
-                    1f to Color.Black.copy(alpha = 0.62f),
-                ),
-            ),
-        )
-        if (dim > 0) Box(Modifier.fillMaxSize().background(Color.Black.copy(alpha = dim / 100f)))
     }
 }
 
@@ -287,6 +307,7 @@ private fun SaverPreview(vm: LauncherViewModel, onBack: () -> Unit) {
     val context = androidx.compose.ui.platform.LocalContext.current
     val settings by vm.settings.collectAsState()
     val weather by vm.weather.collectAsState()
+    val rates = rememberFavoriteRates(vm.rateQuotes, vm::refreshRates, if (settings.screensaver.showRates) settings.rateIds.take(LauncherSettings.HOME_RATES) else emptyList())
     val slides by produceState(emptyList<Slide>()) { value = loadSlides(context.graph, settings) }
     val focus = remember { FocusRequester() }
     ScreenLayer(onBack = onBack, scrim = Color.Black, initialFocus = focus) {
@@ -297,7 +318,7 @@ private fun SaverPreview(vm: LauncherViewModel, onBack: () -> Unit) {
                 .focusable()
                 .onKeyEvent { if (it.type == KeyEventType.KeyDown) { onBack(); true } else false },
         ) {
-            if (slides.isNotEmpty()) Screensaver(slides, settings, weather)
+            if (slides.isNotEmpty()) Screensaver(slides, settings, weather, rates)
         }
     }
 }

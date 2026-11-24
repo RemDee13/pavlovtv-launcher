@@ -26,6 +26,7 @@ import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.State
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.produceState
 import androidx.compose.runtime.remember
@@ -35,6 +36,11 @@ import androidx.compose.runtime.staticCompositionLocalOf
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.input.key.Key
+import androidx.compose.ui.input.key.KeyEventType
+import androidx.compose.ui.input.key.key
+import androidx.compose.ui.input.key.onPreviewKeyEvent
+import androidx.compose.ui.input.key.type
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.foundation.focusGroup
 import androidx.compose.ui.focus.focusProperties
@@ -129,7 +135,8 @@ fun GlassCard(
         border = ClickableSurfaceDefaults.border(border = Border.None, focusedBorder = Border.None),
         glow = ClickableSurfaceDefaults.glow(glow = Glow.None, focusedGlow = Glow.None),
     ) {
-        GlassFill(shape = shape, modifier = Modifier.matchParentSize(), focused = focused)
+        // Opaque-image cards hide the glass anyway; skipping it saves a full-size GPU pass per tile.
+        if (!rimOnTop) GlassFill(shape = shape, modifier = Modifier.matchParentSize(), focused = focused)
         Box(Modifier.padding(contentPadding)) { content(focused) }
         if (rimOnTop) FocusRim(shape = shape, focused = focused, modifier = Modifier.matchParentSize())
     }
@@ -182,8 +189,9 @@ fun GlassIconButton(
     onClick: () -> Unit,
     modifier: Modifier = Modifier,
     size: Dp = 46.dp,
+    focusRequester: FocusRequester? = null,
 ) {
-    GlassCard(onClick = onClick, modifier = modifier.size(size), shape = CircleShape, focusedScale = 1.1f) {
+    GlassCard(onClick = onClick, modifier = modifier.size(size), shape = CircleShape, focusedScale = 1.1f, focusRequester = focusRequester) {
         Box(Modifier.size(size), contentAlignment = Alignment.Center) {
             Icon(icon, contentDescription = contentDescription, modifier = Modifier.size(size * 0.46f))
         }
@@ -231,10 +239,15 @@ fun ScreenLayer(
     val memory = remember { FocusMemory() }
     // A layer opened from inside another layer (a dialog inside settings) hands focus back to the row
     // that opened it. Posted, because the focus tree is still changing while this layer is disposed.
-    val parent = LocalFocusMemory.current
+    // The layer below on screen, not the composition parent: settings dialogs are composed next
+    // to the settings layer, yet focus must go back to the settings row that opened them.
+    val parent = LocalFocusMemory.current.let { local -> remember { openLayers.lastOrNull()?.memory ?: local } }
     val returnTo = remember { parent?.last }
+    val token = remember { OpenLayer(memory) }
     DisposableEffect(Unit) {
+        openLayers += token
         onDispose {
+            openLayers -= token
             if (parent != null && returnTo != null) {
                 Handler(Looper.getMainLooper()).postDelayed({
                     parent.last = returnTo
@@ -245,14 +258,25 @@ fun ScreenLayer(
     }
     BackHandler(onBack = onBack)
     var hasFocus by remember { mutableStateOf(false) }
+    // A layer opened by a long press appears while OK is still held: the key repeats and the
+    // release would land on the layer's first button (a long press on a favourite removed it
+    // right away). OK only works here once it has been pressed afresh inside this layer.
+    var armed by remember { mutableStateOf(false) }
     CompositionLocalProvider(LocalFocusMemory provides memory) {
         Box(
             modifier
                 .fillMaxSize()
                 .background(scrim)
                 .onFocusChanged { hasFocus = it.hasFocus }
+                .onPreviewKeyEvent { event ->
+                    if (event.key !in ConfirmKeys) return@onPreviewKeyEvent false
+                    if (event.type == KeyEventType.KeyDown && event.nativeKeyEvent.repeatCount == 0) armed = true
+                    !armed
+                }
                 .focusRequester(group)
-                .focusProperties { exit = { FocusRequester.Cancel } }
+                // Only the top layer keeps focus in. A layer under a dialog must let it go,
+                // or the dialog's request for focus is cancelled and the remote is stuck.
+                .focusProperties { exit = { if (openLayers.lastOrNull() === token) FocusRequester.Cancel else FocusRequester.Default } }
                 .focusGroup(),
             content = content,
         )
@@ -269,6 +293,13 @@ fun ScreenLayer(
         }
     }
 }
+
+private class OpenLayer(val memory: FocusMemory)
+
+private val ConfirmKeys = setOf(Key.DirectionCenter, Key.Enter, Key.NumPadEnter)
+
+/** [ScreenLayer]s currently on screen, oldest first. */
+private val openLayers = mutableStateListOf<OpenLayer>()
 
 /** Centered dialog card on top of a [ScreenLayer]. */
 @Composable

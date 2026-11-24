@@ -15,7 +15,10 @@ import androidx.savedstate.SavedStateRegistryController
 import androidx.savedstate.SavedStateRegistryOwner
 import androidx.savedstate.setViewTreeSavedStateRegistryOwner
 import io.github.remdee13.pavlovtv.data.AppLocale
+import io.github.remdee13.pavlovtv.data.LauncherSettings
+import io.github.remdee13.pavlovtv.data.rateIds
 import io.github.remdee13.pavlovtv.graph
+import io.github.remdee13.pavlovtv.ui.rates.rememberFavoriteRates
 import io.github.remdee13.pavlovtv.ui.theme.PavlovTheme
 
 /**
@@ -53,7 +56,12 @@ class PavlovDreamService : DreamService(), LifecycleOwner, SavedStateRegistryOwn
                     val slides by produceState(emptyList<Slide>(), settings.screensaver, settings.wallpaper) {
                         value = loadSlides(graph, settings)
                     }
-                    if (slides.isNotEmpty()) Screensaver(slides, settings, weather)
+                    val rates = rememberFavoriteRates(
+                        graph.rates.quotes,
+                        graph.rates::refresh,
+                        if (settings.screensaver.showRates) settings.rateIds.take(LauncherSettings.HOME_RATES) else emptyList(),
+                    )
+                    if (slides.isNotEmpty()) Screensaver(slides, settings, weather, rates)
                 }
             }
         }

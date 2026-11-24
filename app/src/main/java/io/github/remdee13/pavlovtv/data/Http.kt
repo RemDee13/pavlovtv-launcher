@@ -33,6 +33,9 @@ class Http(context: Context) {
                 // The Art Institute's CDN rejects unknown user agents; its API docs ask clients to
                 // identify themselves with this header instead and keep the library default.
                 builder.header("AIC-User-Agent", USER_AGENT)
+            } else if (request.url.host.endsWith("bing.com") || request.url.host.endsWith("yahoo.com")) {
+                // Bing News (RSS) and Yahoo Finance (charts) answer only browser-style agent strings; this one still names us.
+                builder.header("User-Agent", "Mozilla/5.0 (compatible; PavlovTV/${BuildConfig.VERSION_NAME}; +$REPO_URL)")
             } else {
                 builder.header("User-Agent", USER_AGENT)
             }
@@ -54,6 +57,21 @@ class Http(context: Context) {
             val body = response.body ?: throw IOException("Empty body for $url")
             val charset = body.contentType()?.charset()?.name()
             body.bytes() to charset
+        }
+    }
+
+    /**
+     * Reads at most [maxBytes] of the body: enough for a page's <head> (preview image) or a
+     * whole article, without letting a huge page fill the memory of a 1 GB TV.
+     */
+    suspend fun getPrefix(url: String, maxBytes: Long): Pair<ByteArray, String?> = withContext(Dispatchers.IO) {
+        client.newCall(Request.Builder().url(url).header("Accept", "text/html,application/xhtml+xml").build()).execute().use { response ->
+            if (!response.isSuccessful) throw IOException("HTTP ${response.code} for $url")
+            val body = response.body ?: throw IOException("Empty body for $url")
+            val source = body.source()
+            source.request(maxBytes)
+            val size = minOf(source.buffer.size, maxBytes)
+            source.buffer.readByteArray(size) to body.contentType()?.charset()?.name()
         }
     }
 

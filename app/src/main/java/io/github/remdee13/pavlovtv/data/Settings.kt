@@ -14,7 +14,6 @@ import kotlinx.coroutines.runBlocking
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
-import java.time.ZoneId
 
 @Serializable
 data class Place(
@@ -32,14 +31,11 @@ data class Place(
 enum class ClockStyle { ANALOG, DIGITAL }
 
 @Serializable
-data class WorldClock(val place: Place, val style: ClockStyle = ClockStyle.ANALOG)
-
-@Serializable
 enum class TempUnit { CELSIUS, FAHRENHEIT }
 
 /** Visual style of every panel, card, button and dialog. */
 @Serializable
-enum class UiStyle { GLASS, SOLID }
+enum class UiStyle { GLASS, DARK, SOLID }
 
 @Serializable
 enum class OnlineSource { BING, PICSUM, WIKIMEDIA, ART, NASA }
@@ -68,6 +64,7 @@ data class ScreensaverConfig(
     val intervalSec: Int = 30,
     val showClock: Boolean = true,
     val showWeather: Boolean = true,
+    val showRates: Boolean = true,
     val motion: Boolean = true,
 )
 
@@ -77,24 +74,29 @@ data class CustomFeed(val name: String, val url: String)
 @Serializable
 data class LauncherSettings(
     val uiStyle: UiStyle = UiStyle.GLASS,
-    // Weather
+    // Cities: the main one (found by IP or chosen) and up to nine more, each with a clock and weather.
     val weatherAuto: Boolean = true,
     val weatherPlace: Place? = null,
     val extraPlaces: List<Place> = emptyList(),
+    /** Analog or digital clock per city, by [Place.key]; the main city is [MAIN_CITY]. */
+    val clockStyles: Map<String, ClockStyle> = emptyMap(),
     val tempUnit: TempUnit = TempUnit.CELSIUS,
-    // Clocks; null means "not configured yet, use defaults"
-    val clocks: List<WorldClock>? = null,
     val use24h: Boolean = true,
     // News; null means "defaults for the UI language"
     val newsSources: List<String>? = null,
     val customFeeds: List<CustomFeed> = emptyList(),
+    /** News topics found by search ("Tesla", "Формула-1"), any words the user chose. */
+    val newsSearches: List<String> = emptyList(),
+    // Rates: "USD/THB", "BTC/USD"; null means "defaults for the home currency"
+    val favoriteRates: List<String>? = null,
+    val showRates: Boolean = true,
     // Apps; null favorites means "first TV apps"
     val favorites: List<String>? = null,
     val hidden: List<String> = emptyList(),
     val showPhoneApps: Boolean = true,
     // Home screen sections
+    /** The time and weather widget. */
     val showWeather: Boolean = true,
-    val showClocks: Boolean = true,
     val showNews: Boolean = true,
     val showRecommendations: Boolean = true,
     val hiddenChannels: List<Long> = emptyList(),
@@ -104,24 +106,15 @@ data class LauncherSettings(
     val wallpaper: WallpaperConfig = WallpaperConfig(),
     val screensaver: ScreensaverConfig = ScreensaverConfig(),
 ) {
-    val effectiveClocks: List<WorldClock> get() = clocks ?: defaultClocks()
-
     companion object {
-        const val MAX_CLOCKS = 4
-        const val MAX_EXTRA_PLACES = 3
-
-        fun defaultClocks(): List<WorldClock> {
-            val local = ZoneId.systemDefault().id
-            val zones = (listOf(local) + listOf("Europe/London", "America/New_York", "Asia/Tokyo", "Europe/Moscow"))
-                .distinct()
-                .take(MAX_CLOCKS)
-            return zones.mapIndexed { index, zone ->
-                WorldClock(
-                    place = Place(name = cityNameForZone(zone), timezone = zone),
-                    style = if (index == 0) ClockStyle.DIGITAL else ClockStyle.ANALOG,
-                )
-            }
-        }
+        /** Besides the main city, so ten cities in all. */
+        const val MAX_EXTRA_PLACES = 9
+        /** Cities on the home widget, the main one included; every city is on the detail screens. */
+        const val HOME_CITIES = 4
+        const val MAIN_CITY = "main"
+        const val MAX_RATES = 10
+        /** Rates on the home widget and the screensaver. */
+        const val HOME_RATES = 3
     }
 }
 

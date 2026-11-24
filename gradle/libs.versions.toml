@@ -12,8 +12,10 @@ serialization = "1.7.3"
 coil = "2.7.0"
 okhttp = "4.12.0"
 zxing = "3.5.3"
+jsoup = "1.22.2"
 
 [libraries]
+jsoup = { group = "org.jsoup", name = "jsoup", version.ref = "jsoup" }
 compose-bom = { group = "androidx.compose", name = "compose-bom", version.ref = "composeBom" }
 compose-ui = { group = "androidx.compose.ui", name = "ui" }
 compose-ui-graphics = { group = "androidx.compose.ui", name = "ui-graphics" }

@@ -110,31 +110,41 @@ fun GlassFill(
                 // Everything here is plain shape fills: no clipPath and no per-draw color filter,
                 // both of which are slow on the GPUs of cheap TVs.
                 val outline = shape.createOutline(size, layoutDirection, this)
+                val rimScale = if (style == UiStyle.DARK && !focused) 0.6f else 1f
                 val rim = Brush.linearGradient(
-                    0f to Color.White.copy(alpha = if (focused) 0.95f else 0.55f),
+                    0f to Color.White.copy(alpha = (if (focused) 0.95f else 0.55f) * rimScale),
                     0.35f to Color.White.copy(alpha = if (focused) 0.35f else 0.10f),
                     0.65f to Color.White.copy(alpha = if (focused) 0.25f else 0.05f),
                     1f to Color.White.copy(alpha = if (focused) 0.75f else 0.28f),
                     start = Offset.Zero,
                     end = Offset(size.width, size.height),
                 )
-                // Top sheen and bottom glow in one gradient.
-                val light = Brush.verticalGradient(
-                    0f to Color.White.copy(alpha = if (focused) 0.26f else 0.14f),
-                    0.45f to Color.White.copy(alpha = 0.02f),
-                    0.7f to Color.Transparent,
-                    1f to Color.White.copy(alpha = if (focused) 0.12f else 0.05f),
-                )
+                // Dark glass: smoked instead of frosted, with a softer sheen.
+                val dark = style == UiStyle.DARK
+                val milk = when {
+                    dark -> if (focused) 0.10f else 0f
+                    focused -> 0.16f
+                    else -> 0.06f + 0.04f * strength
+                }
+                val darken = if (dark) 0.58f + 0.22f * strength else 0.16f + 0.30f * strength
+                // Top sheen and bottom glow; the tint below folds into the same gradient.
+                val lightStops = floatArrayOf(0f, 0.45f, 0.7f, 1f)
+                val lightAlpha = if (dark) {
+                    floatArrayOf(if (focused) 0.16f else 0.07f, 0.01f, 0f, if (focused) 0.08f else 0.02f)
+                } else {
+                    floatArrayOf(if (focused) 0.26f else 0.14f, 0.02f, 0f, if (focused) 0.12f else 0.05f)
+                }
                 val rimWidth = if (focused) 2.dp.toPx() else 1.dp.toPx()
-                val milk = if (focused) 0.16f else 0.06f + 0.04f * strength
-                val darken = 0.16f + 0.30f * strength
                 val image = backdrop.image
                 val shader = image?.let { BitmapShader(it.asAndroidBitmap(), Shader.TileMode.CLAMP, Shader.TileMode.CLAMP) }
                 val glass = shader?.let { ShaderBrush(it) }
                 val matrix = Matrix()
+                // Built once per size/state, not per frame.
+                val overGlass = overlay(backdrop.dim * 0.6f, darken, milk, lightStops, lightAlpha)
+                val overPlain = overlay(0f, darken, milk, lightStops, lightAlpha)
                 onDrawBehind {
                     val screen = backdrop.screen
-                    var dim = 0f
+                    var over = overPlain
                     if (image != null && shader != null && glass != null && screen.width > 0 && screen.height > 0) {
                         // Map the blurred wallpaper so the panel shows what lies behind it, slightly
                         // magnified (a smaller area stretched over the panel reads as a lens).
@@ -145,19 +155,33 @@ fun GlassFill(
                         matrix.postTranslate(-x0 / lens, -y0 / lens)
                         shader.setLocalMatrix(matrix)
                         drawOutline(outline, glass)
-                        dim = backdrop.dim * 0.6f
+                        over = overGlass
                     } else {
                         drawOutline(outline, Color(0x66101620))
                     }
-                    // Dim, darken and milk layers folded into one translucent grey.
-                    val alpha = 1f - (1f - dim) * (1f - darken) * (1f - milk)
-                    val grey = if (alpha > 0f) milk / alpha else 0f
-                    drawOutline(outline, Color(grey, grey, grey, alpha))
-                    drawOutline(outline, light)
+                    // Dim, darken, milk and the light gradient in ONE translucent pass: each pass
+                    // covers the whole panel, and the TV GPU is limited by pixels drawn.
+                    drawOutline(outline, over)
                     drawOutline(outline, rim, style = Stroke(rimWidth))
                 }
             },
     )
+}
+
+/**
+ * One gradient equal to a grey tint (dim × darken × milk) followed by a white light layer:
+ * c·(1−a)(1−l) + g·a·(1−l) + l  ==  c·(1−A) + C·A  with  A = 1−(1−a)(1−l).
+ */
+private fun overlay(dim: Float, darken: Float, milk: Float, stops: FloatArray, light: FloatArray): Brush {
+    val a = 1f - (1f - dim) * (1f - darken) * (1f - milk)
+    val g = if (a > 0f) milk / a else 0f
+    val colors = Array(stops.size) { i ->
+        val l = light[i]
+        val total = 1f - (1f - a) * (1f - l)
+        val value = if (total > 0f) ((g * a * (1f - l) + l) / total).coerceIn(0f, 1f) else 0f
+        stops[i] to Color(value, value, value, total)
+    }
+    return Brush.verticalGradient(*colors)
 }
 
 /**
@@ -186,7 +210,7 @@ fun FocusRim(shape: Shape, focused: Boolean, modifier: Modifier = Modifier) {
             val glassWidth = if (focused) 2.5.dp.toPx() else 1.dp.toPx()
             val solidWidth = 3.dp.toPx()
             onDrawBehind {
-                if (style == UiStyle.GLASS) {
+                if (style != UiStyle.SOLID) {
                     if (focused) drawOutline(outline, sheen)
                     drawOutline(outline, rim, style = Stroke(glassWidth))
                 } else if (focused) {

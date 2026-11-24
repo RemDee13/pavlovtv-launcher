@@ -1,0 +1,16 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="96" height="96" viewBox="0 0 96 96" role="img" aria-label="Article reader">
+  <title>Article reader</title>
+  <defs>
+    <linearGradient id="f" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#1D2740"/><stop offset="1" stop-color="#0C1220"/></linearGradient>
+    <linearGradient id="r" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#FFFFFF" stop-opacity="0.7"/><stop offset="0.5" stop-color="#FFFFFF" stop-opacity="0.1"/><stop offset="1" stop-color="#FFFFFF" stop-opacity="0.28"/></linearGradient>
+    <radialGradient id="g" cx="0.25" cy="0.15" r="0.9"><stop offset="0" stop-color="#B79CFF" stop-opacity="0.35"/><stop offset="1" stop-color="#B79CFF" stop-opacity="0"/></radialGradient>
+  </defs>
+  <rect x="2" y="2" width="92" height="92" rx="24" fill="url(#f)"/>
+  <rect x="2" y="2" width="92" height="92" rx="24" fill="url(#g)"/>
+  <rect x="2.75" y="2.75" width="90.5" height="90.5" rx="23.25" fill="none" stroke="url(#r)" stroke-width="1.5"/>
+  <g fill="none" stroke-width="4.5" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M48 30 c-7 -5 -17 -6 -26 -4 v40 c9 -2 19 -1 26 4 c7 -5 17 -6 26 -4 v-40 c-9 -2 -19 -1 -26 4 z" stroke="#F4F6FA"/>
+    <path d="M48 30 v40" stroke="#F4F6FA" stroke-opacity="0.6" stroke-width="3"/>
+    <path d="M30 38 h10 M30 47 h10 M56 38 h10 M56 47 h10" stroke="#B79CFF" stroke-width="3.5"/>
+  </g>
+</svg>

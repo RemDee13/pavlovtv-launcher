@@ -41,6 +41,7 @@ import io.github.remdee13.pavlovtv.Graph
 import io.github.remdee13.pavlovtv.data.LauncherSettings
 import io.github.remdee13.pavlovtv.data.SaverMode
 import io.github.remdee13.pavlovtv.data.WallpaperKind
+import io.github.remdee13.pavlovtv.data.RateSeries
 import io.github.remdee13.pavlovtv.data.WeatherBundle
 import io.github.remdee13.pavlovtv.data.OnlineSource
 import io.github.remdee13.pavlovtv.ui.components.rememberNow
@@ -51,6 +52,10 @@ import io.github.remdee13.pavlovtv.ui.theme.Palette
 import io.github.remdee13.pavlovtv.ui.theme.Type
 import io.github.remdee13.pavlovtv.ui.timeText
 import io.github.remdee13.pavlovtv.ui.widgets.WeatherIcon
+import io.github.remdee13.pavlovtv.ui.rates.changeColor
+import io.github.remdee13.pavlovtv.ui.rates.changeText
+import io.github.remdee13.pavlovtv.ui.rates.pairLabel
+import io.github.remdee13.pavlovtv.ui.rates.priceText
 import io.github.remdee13.pavlovtv.wallpaper.Gradients
 import io.github.remdee13.pavlovtv.wallpaper.drawGradientPreset
 import kotlinx.coroutines.delay
@@ -81,7 +86,13 @@ suspend fun loadSlides(graph: Graph, settings: LauncherSettings): List<Slide> {
 }
 
 @Composable
-fun Screensaver(slides: List<Slide>, settings: LauncherSettings, weather: WeatherBundle?, modifier: Modifier = Modifier) {
+fun Screensaver(
+    slides: List<Slide>,
+    settings: LauncherSettings,
+    weather: WeatherBundle?,
+    rates: List<Pair<String, RateSeries?>> = emptyList(),
+    modifier: Modifier = Modifier,
+) {
     val c = settings.screensaver
     val intervalMs = c.intervalSec * 1000L
     var index by remember { mutableIntStateOf(0) }
@@ -106,7 +117,17 @@ fun Screensaver(slides: List<Slide>, settings: LauncherSettings, weather: Weathe
         }
         Box(
             Modifier.fillMaxSize().background(
-                Brush.verticalGradient(0f to Color.Black.copy(alpha = 0.25f), 0.55f to Color.Transparent, 1f to Color.Black.copy(alpha = 0.6f)),
+                // A light shade at the top for the caption; solid black at the very bottom under the
+                // clock, weather and rates, opening up into the picture by about the middle.
+                Brush.verticalGradient(
+                    0f to Color.Black.copy(alpha = 0.35f),
+                    0.2f to Color.Transparent,
+                    0.5f to Color.Transparent,
+                    0.66f to Color.Black.copy(alpha = 0.45f),
+                    0.78f to Color.Black.copy(alpha = 0.8f),
+                    0.86f to Color.Black.copy(alpha = 0.95f),
+                    1f to Color.Black,
+                ),
             ),
         )
         // Shift the overlay a little with every slide so nothing burns into the panel.
@@ -129,6 +150,18 @@ fun Screensaver(slides: List<Slide>, settings: LauncherSettings, weather: Weathe
                     }
                 }
             }
+            if (c.showRates) {
+                val locale = currentLocale()
+                rates.forEach { (id, series) ->
+                    series ?: return@forEach
+                    Spacer(Modifier.width(32.dp))
+                    Column(Modifier.padding(bottom = 10.dp)) {
+                        Text(pairLabel(id, locale), style = Type.date, color = Palette.TextSecondary, maxLines = 1)
+                        Text(priceText(series.last, locale), style = Type.clock.copy(fontSize = 30.sp), maxLines = 1)
+                        Text(changeText(series.change, locale), style = Type.date, color = changeColor(series.change), maxLines = 1)
+                    }
+                }
+            }
         }
         val caption = slides.getOrNull(index)?.caption.orEmpty()
         if (caption.isNotEmpty()) {
@@ -139,7 +172,8 @@ fun Screensaver(slides: List<Slide>, settings: LauncherSettings, weather: Weathe
                 maxLines = 2,
                 overflow = TextOverflow.Ellipsis,
                 textAlign = TextAlign.End,
-                modifier = Modifier.align(Alignment.BottomEnd).padding(end = 48.dp, bottom = 40.dp).widthIn(max = 380.dp),
+                // Top right: the clock, weather and rates fill the bottom line.
+                modifier = Modifier.align(Alignment.TopEnd).padding(end = 48.dp, top = 36.dp).widthIn(max = 420.dp),
             )
         }
     }

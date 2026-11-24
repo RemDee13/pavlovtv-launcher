@@ -148,7 +148,8 @@ class NewsRepository(context: Context, private val http: Http) {
         val ids = settings.newsSources ?: NewsSources.defaultsFor(language)
         val builtIn = ids.mapNotNull { NewsSources.byId(it) }
         val custom = settings.customFeeds.mapIndexed { i, f -> NewsSource("custom_$i", f.name, f.url, language) }
-        return builtIn + custom
+        val searches = settings.newsSearches.map { q -> NewsSource("search_$q", q, NewsSearch.url(q, language), language) }
+        return builtIn + custom + searches
     }
 
     suspend fun refresh(settings: LauncherSettings, language: String, force: Boolean = false) = mutex.withLock {
@@ -195,6 +196,21 @@ class NewsRepository(context: Context, private val http: Http) {
     }
 }
 
+/**
+ * Any topic as a news feed: Bing News search results in RSS (free for personal use in
+ * a feed reader). Cyrillic words search the Russian edition whatever the app language.
+ */
+object NewsSearch {
+    const val MAX = 12
+    private val markets = mapOf("en" to "en-US", "ru" to "ru-RU", "es" to "es-ES", "tr" to "tr-TR", "de" to "de-DE", "fr" to "fr-FR", "pt" to "pt-BR")
+
+    fun url(query: String, language: String): String {
+        val lang = if (query.any { it in '\u0400'..'\u04FF' }) "ru" else language
+        val market = markets[lang] ?: "en-US"
+        return "https://www.bing.com/news/search?q=${Http.encode(query.trim())}&format=rss&setlang=$lang&mkt=$market"
+    }
+}
+
 /** Small RSS 2.0 / RSS 1.0 (RDF) / Atom reader built on the platform XmlPullParser. */
 object RssParser {
     private class Draft {
@@ -204,6 +220,7 @@ object RssParser {
         var description: String? = null
         var date: String? = null
         var image: String? = null
+        var source: String? = null
     }
 
     fun parse(bytes: ByteArray, charset: String?, sourceName: String): List<NewsItem> {
@@ -240,6 +257,9 @@ object RssParser {
                                 if (d.image == null) d.image = firstImage(text)
                             }
                             "pubdate", "dc:date", "published", "updated" -> if (d.date == null) d.date = parser.nextText()
+                            // Bing News: the real publisher and its picture.
+                            "news:source" -> d.source = parser.nextText().trim().takeIf { it.isNotEmpty() }
+                            "news:image" -> if (d.image == null) d.image = parser.nextText().trim().takeIf { it.startsWith("http") }
                             "enclosure", "media:content", "media:thumbnail" -> {
                                 val url = parser.getAttributeValue(null, "url")
                                 val type = parser.getAttributeValue(null, "type") ?: parser.getAttributeValue(null, "medium") ?: ""
@@ -285,11 +305,12 @@ object RssParser {
 
     private fun build(d: Draft, sourceName: String): NewsItem? {
         val title = clean(d.title ?: return null).takeIf { it.isNotBlank() } ?: return null
-        val link = d.link?.trim()?.takeIf { it.startsWith("http") } ?: d.guid?.trim()?.takeIf { it.startsWith("http") } ?: ""
+        val raw = d.link?.trim()?.takeIf { it.startsWith("http") } ?: d.guid?.trim()?.takeIf { it.startsWith("http") } ?: ""
+        val link = unwrapRedirect(raw)
         val rawDescription = d.description.orEmpty()
         val image = (d.image ?: firstImage(rawDescription))?.let(::upgradeImage)
         val summary = clean(rawDescription).let { if (it.length > 420) it.take(417).trimEnd() + "…" else it }
-        return NewsItem(title, summary.takeIf { it != title }.orEmpty(), link, image, sourceName, parseDate(d.date))
+        return NewsItem(title, summary.takeIf { it != title }.orEmpty(), link, image, d.source ?: sourceName, parseDate(d.date))
     }
 
     private val imgRegex = Regex("<img[^>]+src=[\"']([^\"']+)[\"']", RegexOption.IGNORE_CASE)
@@ -300,9 +321,18 @@ object RssParser {
         return path.endsWith(".jpg") || path.endsWith(".jpeg") || path.endsWith(".png") || path.endsWith(".webp")
     }
 
-    /** BBC sends 240px thumbnails; their CDN serves any width from the same path. */
+    /** Search results link through a click counter; the article itself is in its "url" parameter. */
+    private fun unwrapRedirect(link: String): String {
+        if (!link.contains("bing.com/news/apiclick", ignoreCase = true)) return link
+        return runCatching { android.net.Uri.parse(link).getQueryParameter("url") }.getOrNull()?.takeIf { it.startsWith("http") } ?: link
+    }
+
+    /** BBC sends 240px thumbnails; their CDN serves any width from the same path. Bing sizes on request. */
     private val bbcSize = Regex("/(ace/(?:standard|ws))/\\d+/")
-    private fun upgradeImage(url: String): String = url.replace(bbcSize, "/$1/800/")
+    private fun upgradeImage(url: String): String = when {
+        url.contains("bing.com/th?") -> url.replaceFirst("http://", "https://") + "&w=640&h=360&c=14"
+        else -> url.replace(bbcSize, "/$1/800/")
+    }
 
     private val spaces = Regex("\\s+")
     private fun clean(html: String): String =

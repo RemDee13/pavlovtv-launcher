@@ -7,10 +7,13 @@ import coil.ImageLoaderFactory
 import coil.disk.DiskCache
 import coil.memory.MemoryCache
 import io.github.remdee13.pavlovtv.data.AppRepository
+import io.github.remdee13.pavlovtv.data.ArticleRepository
 import io.github.remdee13.pavlovtv.data.FeedFinder
 import io.github.remdee13.pavlovtv.data.GeoRepository
 import io.github.remdee13.pavlovtv.data.Http
+import io.github.remdee13.pavlovtv.data.LocalInfoRepository
 import io.github.remdee13.pavlovtv.data.NewsRepository
+import io.github.remdee13.pavlovtv.data.RatesRepository
 import io.github.remdee13.pavlovtv.data.RecommendationsRepository
 import io.github.remdee13.pavlovtv.data.SettingsStore
 import io.github.remdee13.pavlovtv.data.WeatherRepository
@@ -55,6 +58,9 @@ class Graph(app: Application) {
     val weather = WeatherRepository(app, http, geo)
     val news = NewsRepository(app, http)
     val feedFinder = FeedFinder(http)
+    val articles = ArticleRepository(http)
+    val localInfo = LocalInfoRepository(http, geo)
+    val rates = RatesRepository(http)
     val recommendations = RecommendationsRepository(app)
     val photos = PhotoLibrary(app)
     val imageFeeds = ImageFeeds(app, http)

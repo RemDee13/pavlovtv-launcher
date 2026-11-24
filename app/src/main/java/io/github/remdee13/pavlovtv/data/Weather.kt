@@ -12,6 +12,7 @@ import kotlinx.coroutines.sync.withLock
 import kotlinx.coroutines.withContext
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.encodeToString
+import kotlinx.serialization.json.JsonObject
 import kotlinx.serialization.json.jsonArray
 import kotlinx.serialization.json.jsonObject
 import java.io.File
@@ -52,13 +53,44 @@ data class WeatherNow(
     val isDay: Boolean,
     val humidity: Int,
     val wind: Double,
+    /** Direction the wind comes from, degrees (0 = north). */
+    val windDir: Int = 0,
+    val gusts: Double = 0.0,
+    /** Sea-level pressure, hPa. */
+    val pressure: Double = 0.0,
+    val uv: Double = 0.0,
+    val cloudCover: Int = 0,
+    /** Meters. */
+    val visibility: Double = 0.0,
+    val dewPoint: Double = 0.0,
+)
+
+/** One hour of the forecast; [time] is local to the place, ISO "2026-11-24T18:00". */
+@Serializable
+data class WeatherHour(val time: String, val temp: Double, val code: Int, val isDay: Boolean, val rainChance: Int)
+
+@Serializable
+data class WeatherDay(
+    val date: String,
+    val code: Int,
+    val max: Double,
+    val min: Double,
+    val sunrise: String = "",
+    val sunset: String = "",
+    val rainChance: Int = 0,
+    /** Millimeters (inches with Fahrenheit). */
+    val rainSum: Double = 0.0,
+    val uvMax: Double = 0.0,
+    val windMax: Double = 0.0,
 )
 
 @Serializable
-data class WeatherDay(val date: String, val code: Int, val max: Double, val min: Double)
-
-@Serializable
-data class WeatherReport(val place: Place, val now: WeatherNow, val days: List<WeatherDay>)
+data class WeatherReport(
+    val place: Place,
+    val now: WeatherNow,
+    val days: List<WeatherDay>,
+    val hours: List<WeatherHour> = emptyList(),
+)
 
 @Serializable
 data class WeatherBundle(
@@ -89,7 +121,9 @@ class WeatherRepository(context: Context, private val http: Http, private val ge
     suspend fun refresh(settings: LauncherSettings, force: Boolean = false) = mutex.withLock {
         val key = keyFor(settings)
         val cached = _state.value
-        val fresh = cached != null && cached.key == key && System.currentTimeMillis() - cached.fetchedAt < MAX_AGE_MS
+        // Caches from older versions have no hourly forecast: fetch again to get it.
+        val complete = cached?.main?.hours?.isNotEmpty() ?: true
+        val fresh = cached != null && cached.key == key && complete && System.currentTimeMillis() - cached.fetchedAt < MAX_AGE_MS
         if (fresh && !force) return@withLock
         runCatching {
             val mainPlace = if (settings.weatherAuto || settings.weatherPlace == null) {
@@ -119,18 +153,40 @@ class WeatherRepository(context: Context, private val http: Http, private val ge
         val url = buildString {
             append("https://api.open-meteo.com/v1/forecast?latitude=").append(place.lat)
             append("&longitude=").append(place.lon)
-            append("&current=temperature_2m,apparent_temperature,weather_code,is_day,relative_humidity_2m,wind_speed_10m")
-            append("&daily=weather_code,temperature_2m_max,temperature_2m_min")
-            append("&timezone=auto&forecast_days=5")
-            if (unit == TempUnit.FAHRENHEIT) append("&temperature_unit=fahrenheit&wind_speed_unit=mph")
+            append("&current=temperature_2m,apparent_temperature,weather_code,is_day,relative_humidity_2m,wind_speed_10m,")
+            append("wind_direction_10m,wind_gusts_10m,pressure_msl,uv_index,cloud_cover,visibility,dew_point_2m")
+            append("&hourly=temperature_2m,weather_code,is_day,precipitation_probability&forecast_hours=24")
+            append("&daily=weather_code,temperature_2m_max,temperature_2m_min,sunrise,sunset,")
+            append("precipitation_probability_max,precipitation_sum,uv_index_max,wind_speed_10m_max")
+            append("&timezone=auto&forecast_days=7")
+            if (unit == TempUnit.FAHRENHEIT) append("&temperature_unit=fahrenheit&wind_speed_unit=mph&precipitation_unit=inch")
         }
         val root = http.getJson(url).jsonObject
         val current = root["current"]!!.jsonObject
         val daily = root["daily"]!!.jsonObject
-        val dates = daily["time"]!!.jsonArray.map { it.primitiveOrNull().orEmpty() }
-        val codes = daily["weather_code"]!!.jsonArray.map { it.primitiveOrNull()?.toDoubleOrNull()?.toInt() ?: 0 }
-        val maxes = daily["temperature_2m_max"]!!.jsonArray.map { it.primitiveOrNull()?.toDoubleOrNull() ?: 0.0 }
-        val mins = daily["temperature_2m_min"]!!.jsonArray.map { it.primitiveOrNull()?.toDoubleOrNull() ?: 0.0 }
+        val hourly = root["hourly"]?.jsonObject
+        fun JsonObject.texts(key: String) = this[key]?.jsonArray?.map { it.primitiveOrNull().orEmpty() }.orEmpty()
+        fun JsonObject.numbers(key: String) = this[key]?.jsonArray?.map { it.primitiveOrNull()?.toDoubleOrNull() ?: 0.0 }.orEmpty()
+        val dates = daily.texts("time")
+        val codes = daily.numbers("weather_code")
+        val maxes = daily.numbers("temperature_2m_max")
+        val mins = daily.numbers("temperature_2m_min")
+        val sunrises = daily.texts("sunrise")
+        val sunsets = daily.texts("sunset")
+        val rainChances = daily.numbers("precipitation_probability_max")
+        val rainSums = daily.numbers("precipitation_sum")
+        val uvMaxes = daily.numbers("uv_index_max")
+        val windMaxes = daily.numbers("wind_speed_10m_max")
+        val hours = hourly?.let { h ->
+            val times = h.texts("time")
+            val temps = h.numbers("temperature_2m")
+            val hourCodes = h.numbers("weather_code")
+            val days = h.numbers("is_day")
+            val chances = h.numbers("precipitation_probability")
+            times.indices.map { i ->
+                WeatherHour(times[i], temps.getOrElse(i) { 0.0 }, hourCodes.getOrElse(i) { 0.0 }.toInt(), days.getOrElse(i) { 1.0 } > 0.5, chances.getOrElse(i) { 0.0 }.toInt())
+            }
+        }.orEmpty()
         val timezone = root.str("timezone") ?: place.timezone
         return WeatherReport(
             place = if (place.timezone.isEmpty()) place.copy(timezone = timezone) else place,
@@ -141,8 +197,29 @@ class WeatherRepository(context: Context, private val http: Http, private val ge
                 isDay = (current.num("is_day") ?: 1.0) > 0.5,
                 humidity = current.num("relative_humidity_2m")?.toInt() ?: 0,
                 wind = current.num("wind_speed_10m") ?: 0.0,
+                windDir = current.num("wind_direction_10m")?.toInt() ?: 0,
+                gusts = current.num("wind_gusts_10m") ?: 0.0,
+                pressure = current.num("pressure_msl") ?: 0.0,
+                uv = current.num("uv_index") ?: 0.0,
+                cloudCover = current.num("cloud_cover")?.toInt() ?: 0,
+                visibility = current.num("visibility") ?: 0.0,
+                dewPoint = current.num("dew_point_2m") ?: 0.0,
             ),
-            days = dates.indices.map { i -> WeatherDay(dates[i], codes.getOrElse(i) { 0 }, maxes.getOrElse(i) { 0.0 }, mins.getOrElse(i) { 0.0 }) },
+            days = dates.indices.map { i ->
+                WeatherDay(
+                    date = dates[i],
+                    code = codes.getOrElse(i) { 0.0 }.toInt(),
+                    max = maxes.getOrElse(i) { 0.0 },
+                    min = mins.getOrElse(i) { 0.0 },
+                    sunrise = sunrises.getOrElse(i) { "" },
+                    sunset = sunsets.getOrElse(i) { "" },
+                    rainChance = rainChances.getOrElse(i) { 0.0 }.toInt(),
+                    rainSum = rainSums.getOrElse(i) { 0.0 },
+                    uvMax = uvMaxes.getOrElse(i) { 0.0 },
+                    windMax = windMaxes.getOrElse(i) { 0.0 },
+                )
+            },
+            hours = hours,
         )
     }
 

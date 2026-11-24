@@ -35,6 +35,11 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusRequester
+import androidx.compose.ui.text.input.TextFieldValue
+import androidx.compose.ui.text.TextRange
+import androidx.compose.ui.platform.LocalSoftwareKeyboardController
+import androidx.compose.ui.platform.LocalFocusManager
+import androidx.compose.ui.focus.FocusDirection
 import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.focus.onFocusChanged
 import androidx.compose.ui.graphics.Color
@@ -173,9 +178,17 @@ fun GlassTextField(
 ) {
     var focused by remember { mutableStateOf(false) }
     val own = remember { FocusRequester() }
+    val focusManager = LocalFocusManager.current
+    val keyboard = LocalSoftwareKeyboardController.current
+    // Kept as TextFieldValue to know where the cursor is; the caller only sees the text.
+    var state by remember { mutableStateOf(TextFieldValue(value, TextRange(value.length))) }
+    val current = if (state.text == value) state else TextFieldValue(value, TextRange(value.length))
     BasicTextField(
-        value = value,
-        onValueChange = onValueChange,
+        value = current,
+        onValueChange = {
+            state = it
+            if (it.text != value) onValueChange(it.text)
+        },
         singleLine = true,
         textStyle = Type.body.copy(color = Color.White),
         cursorBrush = SolidColor(Palette.Accent),
@@ -184,6 +197,22 @@ fun GlassTextField(
         modifier = modifier
             .focusRequester(focusRequester ?: own)
             .onFocusChanged { focused = it.isFocused }
+            // Compose moves focus out of a text field only for a physical D-pad. Phone remote
+            // apps and some remotes send "virtual" keys, which would leave the user stuck here.
+            .onPreviewKeyEvent { event ->
+                if (event.type != KeyEventType.KeyDown) return@onPreviewKeyEvent false
+                val atStart = current.selection.collapsed && current.selection.start == 0
+                val atEnd = current.selection.collapsed && current.selection.end == current.text.length
+                when (event.key) {
+                    Key.Enter, Key.NumPadEnter -> { onAction(); true }
+                    Key.DirectionCenter -> { keyboard?.show(); true }
+                    Key.DirectionUp -> focusManager.moveFocus(FocusDirection.Up)
+                    Key.DirectionDown -> focusManager.moveFocus(FocusDirection.Down)
+                    Key.DirectionLeft -> atStart && focusManager.moveFocus(FocusDirection.Left)
+                    Key.DirectionRight -> atEnd && focusManager.moveFocus(FocusDirection.Right)
+                    else -> false
+                }
+            }
             .fillMaxWidth()
             .background(Color.White.copy(alpha = if (focused) 0.16f else 0.08f), RoundedCornerShape(16.dp))
             .border(if (focused) 2.dp else 1.dp, if (focused) Color.White else Color.White.copy(alpha = 0.2f), RoundedCornerShape(16.dp))

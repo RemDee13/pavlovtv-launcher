@@ -5,19 +5,26 @@ import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.viewModelScope
 import io.github.remdee13.pavlovtv.data.AppEntry
 import io.github.remdee13.pavlovtv.data.AppLocale
+import io.github.remdee13.pavlovtv.data.ChartRange
+import io.github.remdee13.pavlovtv.data.Article
+import io.github.remdee13.pavlovtv.data.CityInfo
 import io.github.remdee13.pavlovtv.data.CustomFeed
 import io.github.remdee13.pavlovtv.data.LauncherSettings
 import io.github.remdee13.pavlovtv.data.Place
+import io.github.remdee13.pavlovtv.data.RateSeries
 import io.github.remdee13.pavlovtv.graph
+import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.combine
+import kotlinx.coroutines.flow.debounce
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.drop
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 
+@OptIn(FlowPreview::class)
 class LauncherViewModel(app: Application) : AndroidViewModel(app) {
     private val g = app.graph
 
@@ -62,8 +69,10 @@ class LauncherViewModel(app: Application) : AndroidViewModel(app) {
                 .collect { g.weather.refresh(settings.value, force = true) }
         }
         viewModelScope.launch {
-            settings.map { it.newsSources to it.customFeeds }
+            settings.map { Triple(it.newsSources, it.customFeeds, it.newsSearches) }
                 .distinctUntilChanged().drop(1)
+                // Several topics are often switched in a row: fetch once they settle.
+                .debounce(1200)
                 .collect { g.news.refresh(settings.value, language, force = true) }
         }
     }
@@ -78,6 +87,24 @@ class LauncherViewModel(app: Application) : AndroidViewModel(app) {
 
     fun refreshNews() = viewModelScope.launch { g.news.refresh(settings.value, language, force = true) }
     fun refreshWeather() = viewModelScope.launch { g.weather.refresh(settings.value, force = true) }
+
+    suspend fun article(url: String): Article? = g.articles.load(url)
+
+    suspend fun previewImage(url: String): String? = g.articles.previewImage(url)
+
+    /** Coordinates for a clock that only knows its time zone. */
+    suspend fun locatePlace(place: Place): Place? = g.localInfo.locate(place, language)
+
+    suspend fun cityInfo(place: Place): CityInfo = g.localInfo.info(place, language)
+
+    suspend fun currencyRates(): Map<String, Double>? = g.localInfo.rates()
+
+    /** The last 24 hours of every pair asked for so far, for the widget, chips and screensaver. */
+    val rateQuotes: StateFlow<Map<String, RateSeries>> = g.rates.quotes
+
+    suspend fun refreshRates(ids: List<String>) = g.rates.refresh(ids)
+
+    suspend fun rateSeries(id: String, range: ChartRange): RateSeries? = g.rates.series(id, range)
     fun refreshRecommendations() = viewModelScope.launch { g.recommendations.refresh(force = true) }
 
     /**

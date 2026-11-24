@@ -29,9 +29,9 @@
   <img src="./assets/readme/showcase.webp" width="100%" alt="PavlovTV home screen on a TV with weather, world clock, news and app tiles, with the News settings page and the News screen behind it">
 </p>
 
-**PavlovTV** is a free, open-source launcher (home screen) for Android TV and Google TV. It replaces the busy stock home screen with a quiet one: your apps, the weather, a world clock and the news, on top of any wallpaper you like. No sponsored rows, no ads, no account, no tracking.
+**PavlovTV** is a free, open-source launcher (home screen) for Android TV and Google TV. It replaces the busy stock home screen with a quiet one: your apps, the weather with the sun and the moon, a world clock, exchange rates and the news, on top of any wallpaper you like. No sponsored rows, no ads, no account, no tracking.
 
-It is built for the remote from the first line of code, it fits in a 1.7 MB APK, and it comes in two looks: see-through **Liquid Glass** for those who love it, and calm **Solid** panels for those who don't.
+It is built for the remote from the first line of code, it fits in a 1.9 MB APK, and it comes in three looks: see-through **Liquid Glass**, smoky **Dark glass** for the evening, and calm **Solid** panels for those who don't like glass.
 
 <br>
 
@@ -41,25 +41,25 @@ It is built for the remote from the first line of code, it fits in a 1.7 MB APK,
   <tr>
     <td width="33%" valign="top">
       <img src="./assets/readme/icons/glass.svg" width="48" alt="Liquid Glass icon"><br>
-      <b>Liquid Glass or Solid</b><br>
-      Frosted panels with light on the edges, or opaque calm cards. One switch changes the whole UI.
+      <b>Liquid Glass, Dark glass or Solid</b><br>
+      Frosted panels with light on the edges, smoked glass, or opaque calm cards. One switch changes the whole UI.
     </td>
     <td width="33%" valign="top">
       <img src="./assets/readme/icons/weather.svg" width="48" alt="Weather icon"><br>
-      <b>Weather</b><br>
-      Your city detected automatically, or any city you pick, plus up to 3 more. °C or °F.
+      <b>Weather on a live sky</b><br>
+      Feels like, humidity, wind and the chance of rain on a card that turns blue, orange or night-dark with the real sky.
     </td>
     <td width="33%" valign="top">
       <img src="./assets/readme/icons/clock.svg" width="48" alt="World clock icon"><br>
       <b>World clock</b><br>
-      Up to 4 cities, analog or digital, with the time difference and “tomorrow” hints.
+      Up to 10 cities, analog or digital, with the time difference, the next clock change and “tomorrow” hints.
     </td>
   </tr>
   <tr>
     <td valign="top">
       <img src="./assets/readme/icons/news.svg" width="48" alt="News icon"><br>
       <b>News</b><br>
-      Pick topics (AI, tech, business, science, world) or add any site, YouTube channel or RSS feed.
+      Pick ready topics or search for any subject, or add any site, YouTube channel or RSS feed.
     </td>
     <td valign="top">
       <img src="./assets/readme/icons/recs.svg" width="48" alt="Recommendations icon"><br>
@@ -81,7 +81,7 @@ It is built for the remote from the first line of code, it fits in a 1.7 MB APK,
     <td valign="top">
       <img src="./assets/readme/icons/screensaver.svg" width="48" alt="Screensaver icon"><br>
       <b>Screensaver</b><br>
-      A slideshow with slow zoom, the clock and the weather. Same sources as the wallpaper.
+      A slideshow with slow zoom, the clock, the weather and your rates on a soft dark band.
     </td>
     <td valign="top">
       <img src="./assets/readme/icons/move.svg" width="48" alt="Move mode icon"><br>
@@ -106,6 +106,23 @@ It is built for the remote from the first line of code, it fits in a 1.7 MB APK,
       GPL-3.0, Kotlin and Jetpack Compose for TV. Read it, fork it, improve it.
     </td>
   </tr>
+  <tr>
+    <td valign="top">
+      <img src="./assets/readme/icons/rates.svg" width="48" alt="Rates icon"><br>
+      <b>Rates and stocks</b><br>
+      Currencies, crypto, gold and silver, any stock ticker. A 24-hour sparkline on home, full charts from 1 hour to 5 years.
+    </td>
+    <td valign="top">
+      <img src="./assets/readme/icons/sun.svg" width="48" alt="Sun and moon icon"><br>
+      <b>Sun, moon and sea</b><br>
+      The sun on its arc by day, the moon phase by night. Sunrise, golden hour, tides, waves and air quality for each city.
+    </td>
+    <td valign="top">
+      <img src="./assets/readme/icons/reader.svg" width="48" alt="Article reader icon"><br>
+      <b>Read on the TV</b><br>
+      Open a headline and read the article right on the big screen, or scan the QR code to finish it on your phone.
+    </td>
+  </tr>
 </table>
 
 <br>
@@ -114,11 +131,19 @@ It is built for the remote from the first line of code, it fits in a 1.7 MB APK,
 
 <table>
   <tr>
-    <td width="50%"><img src="./assets/readme/shot-solid.webp" alt="Home screen in the Solid style"></td>
-    <td width="50%"><img src="./assets/readme/shot-weather.webp" alt="Weather screen with a multi-day forecast"></td>
+    <td width="50%"><img src="./assets/readme/shot-home.webp" alt="Home screen in the Dark glass style: Phuket weather on a night sky with the full moon, three more cities, rates and news"></td>
+    <td width="50%"><img src="./assets/readme/shot-rates.webp" alt="Rates screen: a one-day chart of the US dollar in Thai baht with open, high, low and change"></td>
   </tr>
   <tr>
-    <td align="center"><sub><b>Solid style</b> · the same home, no glass</sub></td>
+    <td align="center"><sub><b>Home</b> · weather, sky, cities, rates, news</sub></td>
+    <td align="center"><sub><b>Rates</b> · 1 hour to 5 years, ← → to read any moment</sub></td>
+  </tr>
+  <tr>
+    <td><img src="./assets/readme/shot-clock.webp" alt="World clock screen with the sun curve, tides, moon phase and local info for Florianópolis"></td>
+    <td><img src="./assets/readme/shot-weather.webp" alt="Weather screen with a multi-day forecast"></td>
+  </tr>
+  <tr>
+    <td align="center"><sub><b>World clock</b> · sun, sea, moon and local info</sub></td>
     <td align="center"><sub><b>Weather</b> · today and the days ahead</sub></td>
   </tr>
   <tr>
@@ -130,12 +155,12 @@ It is built for the remote from the first line of code, it fits in a 1.7 MB APK,
     <td align="center"><sub><b>Settings</b> · every page is one press away</sub></td>
   </tr>
   <tr>
-    <td><img src="./assets/readme/shot-screensaver.webp" alt="Slideshow screensaver with clock and weather"></td>
-    <td><img src="./assets/readme/shot-move-mode.webp" alt="Move mode: an app tile with arrows on both sides"></td>
+    <td><img src="./assets/readme/shot-screensaver.webp" alt="Slideshow screensaver: a lighthouse photo with the clock, weather and three rates on a dark band at the bottom"></td>
+    <td><img src="./assets/readme/shot-solid.webp" alt="Home screen in the Solid style"></td>
   </tr>
   <tr>
-    <td align="center"><sub><b>Screensaver</b> · slow motion, clock, weather</sub></td>
-    <td align="center"><sub><b>Move mode</b> · ← → to slide, OK to drop</sub></td>
+    <td align="center"><sub><b>Screensaver</b> · clock, weather and rates</sub></td>
+    <td align="center"><sub><b>Solid style</b> · the same home, no glass</sub></td>
   </tr>
 </table>
 
@@ -246,12 +271,17 @@ No ads, no analytics, no crash reporting, no account, no Google services. Your s
 | What | Service | When |
 |---|---|---|
 | Weather and city search | [Open-Meteo](https://open-meteo.com) | Weather widget is on |
+| Tides, waves and air quality | Open-Meteo Marine and Air Quality | You open the world clock |
+| Public holidays | [Nager.Date](https://date.nager.at) | You open the world clock |
+| Exchange rate for a city's currency | [ExchangeRate-API](https://www.exchangerate-api.com) | You open the world clock |
+| Currencies, metals and stocks | Yahoo Finance | Rates are on |
+| Crypto prices | Binance public market data | You added a crypto pair |
 | Approximate city by IP | [GeoJS](https://www.geojs.io) | “Detect automatically” is on |
 | Wallpapers | Bing, Lorem Picsum, Wikimedia Commons, Art Institute of Chicago, NASA | You chose that source |
-| Headlines | Only the feeds and sites you chose | News widget is on |
+| Headlines | Only the feeds and sites you chose, plus Bing News for topics you search | News widget is on |
 | Photos and links from your phone | A small web page served by the TV itself, on your Wi-Fi only | While that screen is open |
 
-Permissions are the minimum a launcher needs: listing installed apps, reading recommendation rows, reading pictures you choose from storage, and asking Android to uninstall an app when you pick **Uninstall**.
+Sunrise, sunset and the moon phase are worked out on the TV itself. Permissions are the minimum a launcher needs: listing installed apps, reading recommendation rows, reading pictures you choose from storage, and asking Android to uninstall an app when you pick **Uninstall**.
 
 <br>
 
@@ -259,9 +289,9 @@ Permissions are the minimum a launcher needs: listing installed apps, reading re
 
 | | |
 |---|---|
-| APK size | **1.7 MB** |
-| Memory | about **90 MB** right after start, on a real 1 GB Android TV 11 set |
-| Cold start | about **1.4 s** on the same TV |
+| APK size | **1.9 MB** |
+| Memory | about **95 MB** right after start, on a real 1 GB Android TV 11 set |
+| Cold start | about **1.3 s** on the same TV |
 | Minimum Android | **8.0** (API 26) |
 | Slow TV? | Switch to **Solid** style, keep only **Continue watching**, and turn off **Slow motion** in the screensaver |
 
@@ -275,7 +305,7 @@ Many TV boxes ship with 1–2 GB of RAM and a stock launcher that eats a good pa
 |---|:---:|:---:|
 | Sponsored rows and banners | None | Common on Google TV |
 | Your own wallpaper | Any picture | Usually fixed |
-| Weather, world clock, news on home | ✅ | — |
+| Weather, world clock, rates, news on home | ✅ | — |
 | Reorder and hide apps freely | ✅ | Limited |
 | Recommendation rows from apps | ✅ you pick which | ✅ |
 | Google account required | No | Yes on Google TV |
@@ -371,7 +401,7 @@ Apps, favorites and the built-in gradient wallpapers work offline. Weather, news
 <details>
 <summary><b>I don't like the glass look.</b></summary>
 
-Settings → Appearance → Interface style → **Solid**. Every panel in the app becomes opaque, and it is a bit lighter for slow TVs too.
+Settings → Appearance → Interface style → **Dark glass** for smoked, calmer panels, or **Solid** for no glass at all. Solid is a bit lighter for slow TVs too.
 
 </details>
 
@@ -384,8 +414,11 @@ Settings → Appearance → Interface style → **Solid**. Every panel in the ap
 - [x] Liquid Glass and Solid styles
 - [x] Wallpapers and screensaver from 7 free sources and your own photos
 - [x] Seven languages
-- [ ] More widgets: currency rates, calendar, sunrise and sunset, air quality
 - [x] News by topic and from any site
+- [x] Rates and stocks with charts
+- [x] Sun, moon, tides and air quality
+- [x] Dark glass style
+- [ ] Calendar widget
 - [ ] Testing on more TVs and boxes
 - [ ] Voice search from the home screen
 - [ ] More languages, with your help
@@ -417,7 +450,7 @@ keyPassword=...
 
 The same values can come from the `PAVLOVTV_STORE_FILE`, `PAVLOVTV_STORE_PASSWORD`, `PAVLOVTV_KEY_ALIAS` and `PAVLOVTV_KEY_PASSWORD` environment variables, which is what the release workflow uses.
 
-**Stack:** Kotlin 2.1, Jetpack Compose for TV (tv-material 1.0), Coil, OkHttp, kotlinx.serialization, DataStore, ZXing.
+**Stack:** Kotlin 2.1, Jetpack Compose for TV (tv-material 1.0), Coil, OkHttp, kotlinx.serialization, DataStore, ZXing, jsoup.
 
 <br>
 
@@ -435,7 +468,7 @@ Bug reports, ideas and pull requests are welcome.
 
 PavlovTV is free software under the [GNU General Public License v3.0](./LICENSE).
 
-Weather data by [Open-Meteo.com](https://open-meteo.com) (CC BY 4.0). City search by Open-Meteo Geocoding and GeoNames. Artworks from the [Art Institute of Chicago](https://www.artic.edu) (CC0). Space photos from the [NASA Image and Video Library](https://images.nasa.gov). QR codes by [ZXing](https://github.com/zxing/zxing). Wallpapers shown in the screenshots are Bing pictures of the day, © their respective owners.
+Weather, sea and air data by [Open-Meteo.com](https://open-meteo.com) (CC BY 4.0). Public holidays by [Nager.Date](https://date.nager.at). Exchange rates by [ExchangeRate-API](https://www.exchangerate-api.com). Market data from Yahoo Finance and Binance, for information only, not investment advice. City search by Open-Meteo Geocoding and GeoNames. Artworks from the [Art Institute of Chicago](https://www.artic.edu) (CC0). Space photos from the [NASA Image and Video Library](https://images.nasa.gov). QR codes by [ZXing](https://github.com/zxing/zxing). Wallpapers shown in the screenshots are Bing, Unsplash and Wikimedia Commons pictures, © their respective owners.
 
 <p align="center">
   <br>
